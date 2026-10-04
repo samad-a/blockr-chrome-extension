@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import blockrIcon from '../assets/blockr-icon.svg'
+import { isPresetEnabled } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
 import { useBlockList } from '../shared/useBlockList'
@@ -113,7 +114,7 @@ export default function OptionsApp() {
                 name: p.name,
                 url: p.url,
                 timesBlocked: blockCounts[p.url] ?? 0,
-                enabled: state.presetEnabled[p.id] ?? false,
+                enabled: isPresetEnabled(state, p.id),
                 editable: false,
               }))}
               onToggle={(id, enabled) =>

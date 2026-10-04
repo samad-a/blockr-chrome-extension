@@ -18,10 +18,11 @@ p {
 
 button {
     background-color: #D54949;
-    border: none;
+    /* Constant border so hovering recolours the button without changing its size. */
+    border: 2px solid #D54949;
     color: white;
     border-radius: 12px;
-    padding: 12px 36px;
+    padding: 10px 34px;
     cursor: pointer;
     text-align: center;
     font-size: 22px;
@@ -31,7 +32,6 @@ button {
 }
 
 button:hover {
-  border: 2px solid #D54949;
   background-color: white;
   color: #D54949;
 }
@@ -80,7 +80,7 @@ button:active {
 .split-chevron {
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 8px;
     border-radius: 0 12px 12px 0;
 }
 
@@ -104,7 +104,8 @@ button:active {
 }
 
 .menu-item {
-    padding: 8px 10px;
+    padding: 6px 10px;
+    border: 2px solid transparent;
     border-radius: 8px;
     background: none;
     color: #D54949;
@@ -114,7 +115,6 @@ button:active {
 }
 
 .menu-item:hover {
-    border: none;
     background-color: #FFEEEE;
     color: #D54949;
 }

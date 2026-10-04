@@ -19,17 +19,30 @@ describe('countBlocked', () => {
   })
 
   it('counts presets only when their category switch is on', () => {
-    const presetEnabled = { 'social-instagram': true, 'social-reddit': true }
+    const presetEnabled = { 'social-tiktok': false, 'social-x': false, 'social-facebook': false }
     expect(countBlocked({ ...DEFAULT_STATE, presetEnabled })).toBe(0)
     expect(
       countBlocked({ ...DEFAULT_STATE, presetEnabled, categories: { social: true, shortForm: false } }),
     ).toBe(2)
   })
 
+  it('treats presets as on unless switched off', () => {
+    const categories = { social: true, shortForm: false }
+    expect(countBlocked({ ...DEFAULT_STATE, categories })).toBe(5)
+    expect(countBlocked({ ...DEFAULT_STATE, categories, presetEnabled: { 'social-reddit': false } })).toBe(4)
+  })
+
   it('counts a URL once even if it is in several lists', () => {
     const state: BlockListState = {
       customSites: [site('tiktok.com', true)],
-      presetEnabled: { 'social-tiktok': true, 'short-tiktok': true },
+      presetEnabled: {
+        'social-instagram': false,
+        'social-x': false,
+        'social-facebook': false,
+        'social-reddit': false,
+        'short-youtube-shorts': false,
+        'short-instagram-reels': false,
+      },
       categories: { social: true, shortForm: true },
     }
     expect(countBlocked(state)).toBe(1)

@@ -22,7 +22,7 @@ export type PresetSite = {
 /** Everything persisted in chrome.storage.sync. */
 export type BlockListState = {
   customSites: CustomSite[]
-  /** presetId -> enabled. Missing means off. */
+  /** presetId -> enabled. Missing means on. */
   presetEnabled: Record<string, boolean>
   /** Master switches, shown in the popup. A preset is blocked only if its category is on too. */
   categories: Record<Category, boolean>

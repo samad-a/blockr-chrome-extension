@@ -35,7 +35,7 @@ describe('activeSites', () => {
   it('combines enabled custom sites and presets with their category on, without duplicates', () => {
     const state: BlockListState = {
       customSites: [site('tiktok.com', true), site('off.com', false)],
-      presetEnabled: { 'social-tiktok': true, 'social-reddit': true, 'short-youtube-shorts': true },
+      presetEnabled: { 'social-instagram': false, 'social-x': false, 'social-facebook': false },
       categories: { social: true, shortForm: false },
     }
     expect(activeSites(state).map((s) => s.url)).toEqual(['tiktok.com', 'reddit.com'])

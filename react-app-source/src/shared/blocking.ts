@@ -3,6 +3,9 @@ import type { BlockListState } from './types'
 
 export type ActiveSite = { name: string; url: string }
 
+/** Presets are on unless the user has switched them off. */
+export const isPresetEnabled = (state: BlockListState, id: string) => state.presetEnabled[id] ?? true
+
 /** Sites that should be blocked right now, one per distinct URL. */
 export function activeSites(state: BlockListState): ActiveSite[] {
   const byUrl = new Map<string, ActiveSite>()
@@ -10,7 +13,7 @@ export function activeSites(state: BlockListState): ActiveSite[] {
     if (site.enabled) byUrl.set(site.url, { name: site.name, url: site.url })
   }
   for (const preset of ALL_PRESETS) {
-    if (state.categories[preset.category] && state.presetEnabled[preset.id] && !byUrl.has(preset.url)) {
+    if (state.categories[preset.category] && isPresetEnabled(state, preset.id) && !byUrl.has(preset.url)) {
       byUrl.set(preset.url, { name: preset.name, url: preset.url })
     }
   }
