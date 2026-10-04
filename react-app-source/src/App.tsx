@@ -1,33 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import blockrIcon from './assets/blockr-icon.svg'
 import './App.css'
 
+type ToggleProps = {
+  label: string
+  checked: boolean
+  onChange: (checked: boolean) => void
+}
+
+function Toggle({ label, checked, onChange }: ToggleProps) {
+  return (
+    <div className="row">
+      <label className="switch">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          aria-label={label}
+        />
+        <span className="slider round"></span>
+      </label>
+      <p>{label}</p>
+    </div>
+  )
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  // UI state only for now; saving to chrome.storage and the actual
+  // blocking come next.
+  const [blockedCount] = useState(0)
+  const [blockSocial, setBlockSocial] = useState(false)
+  const [blockShortForm, setBlockShortForm] = useState(false)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="title">
+        <img src={blockrIcon} id="blockrIcon" alt="" />
+        <h1>Blockr</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+      <div className="container">
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          currently blocking {blockedCount} {blockedCount === 1 ? 'site' : 'sites'}
         </p>
+        <button id="disableButton">disable</button>
+        <Toggle
+          label="block social media"
+          checked={blockSocial}
+          onChange={setBlockSocial}
+        />
+        <Toggle
+          label="block short-form content"
+          checked={blockShortForm}
+          onChange={setBlockShortForm}
+        />
+        <button id="blockListButton">edit block list</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
