@@ -1,69 +1,128 @@
-/* Ported from popup/popup.css */
+/* Popup styles. Colours come from shared/theme.css. */
 
 h1 {
-    color: #D54949;
+    color: var(--red);
     font-size: 28px;
-    font-family: 'DM Sans', sans-serif;
     font-weight: 700;
     font-style: italic;
     margin: 0;
 }
 
 p {
-    color:#D54949;
-    font-family: 'DM Sans', sans-serif;
+    color: var(--red);
     font-size: 14px;
     margin: 0;
 }
 
+/* Chrome draws the popup window itself, so the rounded border is a card inset on the pink page. */
+.popup {
+    margin: 8px;
+    padding: 14px 16px 16px;
+    background-color: white;
+    border: 2px solid var(--red);
+    border-radius: 16px;
+}
+
 button {
-    background-color: #D54949;
+    background-color: var(--red);
     /* Constant border so hovering recolours the button without changing its size. */
-    border: 2px solid #D54949;
+    border: 2px solid var(--red);
     color: white;
     border-radius: 12px;
-    padding: 10px 34px;
+    padding: 9px 20px;
     cursor: pointer;
     text-align: center;
-    font-size: 22px;
-    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-family: inherit;
     font-weight: 700;
     letter-spacing: 1px;
+    transition: background-color 0.15s, color 0.15s, transform 0.08s;
 }
 
 button:hover {
-  background-color: white;
-  color: #D54949;
+    background-color: white;
+    color: var(--red);
 }
 
 button:active {
-  transform: translateY(4px)
+    transform: translateY(3px);
+}
+
+button:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+}
+
+/* Secondary action: outlined, so it doesn't compete with the main button. */
+.secondary {
+    width: 100%;
+    background-color: white;
+    color: var(--red);
+}
+
+.secondary:hover {
+    background-color: var(--pink);
 }
 
 .title {
     display: flex;
     align-items: center;
-    justify-content: left;
     gap: 10px;
-    margin-left: 5%;
-    margin-top: 5%;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #f6d3d3;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+/* "currently blocking 7 sites" */
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    white-space: nowrap;
+    border-radius: 999px;
+    background-color: var(--pink);
+    font-weight: 700;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--red);
+}
+
+.status.idle .dot {
+    background-color: #b5b5b5;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 10px;
+    border-radius: 12px;
+    background-color: var(--pink);
 }
 
 .row {
     display: flex;
     align-items: center;
-    justify-content: left;
     gap: 10px;
-    padding-left: 15%;
-    width: 100%;
 }
 
-.container {
-    display: flex;
-  flex-direction: column; 
-    align-items: center;   
-    gap: 18px;             
-    padding-top: 10px;
+.row p {
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 /* disable button + pause drop-down */
@@ -71,16 +130,18 @@ button:active {
     position: relative;
     display: flex;
     gap: 2px;
+    width: 100%;
 }
 
 .split-main {
+    flex: 1;
     border-radius: 12px 0 0 12px;
 }
 
 .split-chevron {
     display: flex;
     align-items: center;
-    padding: 0 8px;
+    padding: 0 10px;
     border-radius: 0 12px 12px 0;
 }
 
@@ -94,6 +155,7 @@ button:active {
     min-width: 150px;
     padding: 6px;
     background-color: white;
+    border: 2px solid var(--red);
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(213, 73, 73, 0.3);
 }
@@ -108,17 +170,21 @@ button:active {
     border: 2px solid transparent;
     border-radius: 8px;
     background: none;
-    color: #D54949;
+    color: var(--red);
     font-size: 14px;
     letter-spacing: 0;
     text-align: left;
 }
 
 .menu-item:hover {
-    background-color: #FFEEEE;
-    color: #D54949;
+    background-color: var(--pink);
+    color: var(--red);
 }
 
 .menu-item:active {
     transform: none;
+}
+
+.title img {
+    height: 36px;
 }

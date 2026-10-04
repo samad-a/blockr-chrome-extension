@@ -16,7 +16,7 @@ type ToggleProps = {
 function Toggle({ label, checked, onChange }: ToggleProps) {
   return (
     <div className="row">
-      <Switch label={label} checked={checked} onChange={onChange} />
+      <Switch small label={label} checked={checked} onChange={onChange} />
       <p>{label}</p>
     </div>
   )
@@ -30,38 +30,44 @@ function App() {
   if (!state) return null
 
   const blockedCount = countBlocked(state)
-  const status = !isPaused(pause)
-    ? `currently blocking ${blockedCount} ${blockedCount === 1 ? 'site' : 'sites'}`
+  const paused = isPaused(pause)
+  const status = !paused
+    ? `blocking ${blockedCount} ${blockedCount === 1 ? 'site' : 'sites'}`
     : pause?.until
-      ? `blocking paused until ${new Date(pause.until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-      : 'blocking paused'
+      ? `paused until ${new Date(pause.until).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
+      : 'paused'
   const setCategory = (category: 'social' | 'shortForm') => (on: boolean) =>
     update((s) => ({ ...s, categories: { ...s.categories, [category]: on } }))
 
   return (
-    <>
+    <div className="popup">
       <div className="title">
         <img src={blockrIcon} id="blockrIcon" alt="" />
         <h1>Blockr</h1>
       </div>
       <div className="container">
-        <p>{status}</p>
+        <p className={paused || blockedCount === 0 ? 'status idle' : 'status'}>
+          <span className="dot" aria-hidden />
+          {status}
+        </p>
         <PauseControl pause={pause} />
-        <Toggle
-          label="block social media"
-          checked={state.categories.social}
-          onChange={setCategory('social')}
-        />
-        <Toggle
-          label="block short-form content"
-          checked={state.categories.shortForm}
-          onChange={setCategory('shortForm')}
-        />
-        <button id="blockListButton" onClick={() => chrome.runtime.openOptionsPage()}>
+        <div className="panel">
+          <Toggle
+            label="block social media"
+            checked={state.categories.social}
+            onChange={setCategory('social')}
+          />
+          <Toggle
+            label="block short-form content"
+            checked={state.categories.shortForm}
+            onChange={setCategory('shortForm')}
+          />
+        </div>
+        <button id="blockListButton" className="secondary" onClick={() => chrome.runtime.openOptionsPage()}>
           edit block list
         </button>
       </div>
-    </>
+    </div>
   )
 }
 
