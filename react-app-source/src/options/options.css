@@ -117,7 +117,7 @@ body {
 }
 
 .tab.active {
-  background-color: #ffdede;
+  background-color: #fff;
   color: var(--red);
 }
 
