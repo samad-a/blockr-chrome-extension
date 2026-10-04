@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_STATE, countBlocked } from './storage'
+import { countBlocked } from './blocking'
+import { DEFAULT_STATE } from './storage'
 import type { BlockListState } from './types'
 
 const site = (url: string, enabled: boolean) => ({ id: url, name: url, url, dateAdded: 0, enabled })

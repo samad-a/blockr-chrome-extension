@@ -1,6 +1,7 @@
 import blockrIcon from './assets/blockr-icon.svg'
 import { Switch } from './shared/Switch'
-import { countBlocked, useBlockList } from './shared/storage'
+import { countBlocked } from './shared/blocking'
+import { useBlockList } from './shared/useBlockList'
 import './App.css'
 
 type ToggleProps = {

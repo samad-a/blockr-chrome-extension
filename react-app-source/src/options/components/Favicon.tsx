@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { bundledIconFor } from '../../shared/presets'
+import { bundledIconFor } from '../../shared/icons'
 
 // Chrome's favicon cache (needs the "favicon" permission). Nothing is sent to third parties.
 // Chrome never errors for a missing icon: it serves a default globe instead, so we

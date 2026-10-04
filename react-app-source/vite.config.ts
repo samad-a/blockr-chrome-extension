@@ -10,6 +10,11 @@ export default defineConfig({
     // Extension pages load from disk, so preload hints add nothing, and Chrome
     // warns about them ("cross-world extension resource mismatch").
     modulePreload: false,
+    rollupOptions: {
+      // The blocked page is only reached through redirects, so the manifest
+      // doesn't reference it as a page; add it as an entry so it gets bundled.
+      input: { blocked: 'blocked.html' },
+    },
   },
   server: {
     // Lets the extension load scripts from the dev server during `npm run dev`

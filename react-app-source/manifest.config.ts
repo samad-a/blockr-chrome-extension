@@ -24,5 +24,17 @@ export default defineManifest({
   },
   options_page: 'options.html',
   // "favicon" lets the options page read site icons from Chrome's local cache.
-  permissions: ['storage', 'favicon'],
+  permissions: [
+    'storage',
+    'favicon',
+    // Blocking: redirect rules, in-page navigation checks, sweeping open tabs, timed pause.
+    'declarativeNetRequest',
+    'webNavigation',
+    'tabs',
+    'alarms',
+  ],
+  // Needed so redirect rules can apply to every site the user may block.
+  host_permissions: ['<all_urls>'],
+  // The blocked page is the redirect target, so web pages must be able to land on it.
+  web_accessible_resources: [{ resources: ['blocked.html'], matches: ['<all_urls>'] }],
 })
