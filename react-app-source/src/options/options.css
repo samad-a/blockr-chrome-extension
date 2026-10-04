@@ -273,3 +273,11 @@ body {
   font-size: 28px;
   line-height: 20px;
 }
+
+/* Bundled brand logos are monochrome shapes: keep them uncropped on white. */
+.favicon-brand {
+  box-sizing: border-box;
+  padding: 4px;
+  background-color: #fff;
+  object-fit: contain;
+}

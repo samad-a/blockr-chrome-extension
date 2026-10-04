@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { bundledIconFor } from '../../shared/presets'
 
 // Chrome's favicon cache (needs the "favicon" permission). Nothing is sent to third parties.
 // Chrome never errors for a missing icon: it serves a default globe instead, so we
@@ -35,17 +36,12 @@ async function resolveIcon(url: string): Promise<string | null> {
   return null
 }
 
-type FaviconProps = {
-  url: string
-  /** A bundled icon; used instead of the cache when given. */
-  src?: string
-}
-
-export function Favicon({ url, src }: FaviconProps) {
+export function Favicon({ url }: { url: string }) {
+  const bundled = bundledIconFor(url)
   const [found, setFound] = useState<{ url: string; src: string | null } | null>(null)
 
   useEffect(() => {
-    if (!url || src) return
+    if (!url || bundled) return
     let active = true
     let promise = resolved.get(url)
     if (!promise) {
@@ -56,9 +52,10 @@ export function Favicon({ url, src }: FaviconProps) {
     return () => {
       active = false
     }
-  }, [url, src])
+  }, [url, bundled])
 
-  const shown = src ?? (found?.url === url ? found.src : null)
+  if (bundled) return <img className="favicon favicon-brand" src={bundled} alt="" />
+  const shown = found?.url === url ? found.src : null
   if (!shown) return <span className="favicon favicon-fallback" aria-hidden />
   return <img className="favicon" src={shown} alt="" />
 }
