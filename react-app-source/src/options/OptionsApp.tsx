@@ -3,6 +3,7 @@ import blockrIcon from '../assets/blockr-icon.svg'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
 import { useBlockList } from '../shared/useBlockList'
+import { useLocalState } from '../shared/useLocalState'
 import type { Category } from '../shared/types'
 import { SiteTable } from './components/SiteTable'
 import type { SiteRowData } from './components/SiteRow'
@@ -28,13 +29,14 @@ const CATEGORY_LABEL: Record<Category, string> = {
 
 export default function OptionsApp() {
   const { state, update, error } = useBlockList()
+  const { blockCounts } = useLocalState()
   const [tab, setTab] = useState<TabId>('custom')
 
   if (!state) return null
 
   const customRows: SiteRowData[] = state.customSites.map((s) => ({
     ...s,
-    timesBlocked: 0,
+    timesBlocked: blockCounts[s.url] ?? 0,
     editable: true,
   }))
 
@@ -110,7 +112,7 @@ export default function OptionsApp() {
                 id: p.id,
                 name: p.name,
                 url: p.url,
-                timesBlocked: 0,
+                timesBlocked: blockCounts[p.url] ?? 0,
                 enabled: state.presetEnabled[p.id] ?? false,
                 editable: false,
               }))}

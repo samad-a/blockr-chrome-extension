@@ -1,7 +1,10 @@
 import blockrIcon from './assets/blockr-icon.svg'
+import { PauseControl } from './PauseControl'
 import { Switch } from './shared/Switch'
 import { countBlocked } from './shared/blocking'
+import { isPaused } from './shared/local'
 import { useBlockList } from './shared/useBlockList'
+import { useLocalState } from './shared/useLocalState'
 import './App.css'
 
 type ToggleProps = {
@@ -21,11 +24,17 @@ function Toggle({ label, checked, onChange }: ToggleProps) {
 
 function App() {
   const { state, update } = useBlockList()
+  const { pause } = useLocalState()
 
   // Wait for storage so the popup doesn't flash "0 sites".
   if (!state) return null
 
   const blockedCount = countBlocked(state)
+  const status = !isPaused(pause)
+    ? `currently blocking ${blockedCount} ${blockedCount === 1 ? 'site' : 'sites'}`
+    : pause?.until
+      ? `blocking paused until ${new Date(pause.until).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+      : 'blocking paused'
   const setCategory = (category: 'social' | 'shortForm') => (on: boolean) =>
     update((s) => ({ ...s, categories: { ...s.categories, [category]: on } }))
 
@@ -36,10 +45,8 @@ function App() {
         <h1>Blockr</h1>
       </div>
       <div className="container">
-        <p>
-          currently blocking {blockedCount} {blockedCount === 1 ? 'site' : 'sites'}
-        </p>
-        <button id="disableButton">disable</button>
+        <p>{status}</p>
+        <PauseControl pause={pause} />
         <Toggle
           label="block social media"
           checked={state.categories.social}
