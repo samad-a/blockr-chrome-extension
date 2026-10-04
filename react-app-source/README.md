@@ -25,5 +25,7 @@ Keep `npm run dev` running while you work; the dev build in `dist/` needs the de
 
 - `manifest.config.ts` – the extension manifest (CRXJS turns it into `dist/manifest.json`)
 - `index.html` + `src/main.tsx` + `src/App.tsx` – the popup
+- `options.html` + `src/options/` – the block list options page (opened from the popup's "edit block list")
+- `src/shared/` – code used by both pages: types, preset lists, storage hook, URL validation, `Switch`
 - `src/background.ts` – service worker (blocking logic goes here)
 - `public/icons/` – extension icons

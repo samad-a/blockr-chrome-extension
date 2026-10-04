@@ -22,5 +22,7 @@ export default defineManifest({
     service_worker: 'src/background.ts',
     type: 'module',
   },
-  permissions: ['storage'],
+  options_page: 'options.html',
+  // "favicon" lets the options page read site icons from Chrome's local cache.
+  permissions: ['storage', 'favicon'],
 })

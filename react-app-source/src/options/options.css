@@ -1,0 +1,275 @@
+html,
+body {
+  margin: 0;
+  background-color: var(--pink);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--red);
+}
+
+.options {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 24px 24px 48px;
+}
+
+/* ---------- header ---------- */
+
+.options-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  height: 40px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.donate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ---------- pill buttons ---------- */
+
+.pill {
+  display: inline-block;
+  box-sizing: border-box;
+  background-color: var(--red);
+  color: #fff;
+  border: 2px solid var(--red);
+  border-radius: 999px;
+  padding: 3px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pill:hover {
+  background-color: #fff;
+  color: var(--red);
+}
+
+.pill:active {
+  transform: translateY(2px);
+}
+
+.pill-light {
+  background-color: var(--red-light);
+  border-color: var(--red-light);
+}
+
+.pill:focus-visible,
+.tab:focus-visible,
+.add-button:focus-visible,
+.text-input:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
+/* ---------- tabs ---------- */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.tab {
+  border: none;
+  border-radius: 10px 10px 0 0;
+  padding: 8px 12px;
+  background-color: #e6e6e6;
+  color: #444;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #dcdcdc;
+}
+
+.tab.active {
+  background-color: #ffdede;
+  color: var(--red);
+}
+
+/* ---------- card + table ---------- */
+
+.card {
+  background-color: #fff;
+  border-radius: 0 12px 12px 12px;
+  padding: 16px;
+  min-height: 320px;
+  overflow-x: auto;
+}
+
+.banner {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: var(--pink);
+  font-size: 14px;
+}
+
+.master {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.master p {
+  margin: 0;
+}
+
+.site-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  font-size: 14px;
+}
+
+.site-table th {
+  padding: 0 8px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.site-table td {
+  padding: 6px 8px;
+  background-color: #f3f3f3;
+}
+
+.site-table td:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.site-table td:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.cell-center {
+  text-align: center !important;
+}
+
+.cell-icon {
+  width: 24px;
+}
+
+.cell-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.cell-actions .pill + .pill {
+  margin-left: 6px;
+}
+
+.cell-error {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.empty {
+  text-align: center;
+  padding: 24px;
+}
+
+/* ---------- favicon ---------- */
+
+.favicon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.favicon-fallback {
+  background-color: #aaa;
+}
+
+/* ---------- editing + adding ---------- */
+
+.editor-fields {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 8px;
+}
+
+.text-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid var(--red-light);
+  border-radius: 6px;
+  background-color: #fff;
+  color: var(--red);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.text-input[aria-invalid='true'] {
+  border-color: var(--red);
+  border-width: 2px;
+}
+
+.add-row td {
+  padding: 0;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: #777;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  color: var(--red);
+}
+
+.plus {
+  width: 24px;
+  text-align: center;
+  font-size: 28px;
+  line-height: 20px;
+}

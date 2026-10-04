@@ -1,5 +1,6 @@
-import { useState } from 'react'
 import blockrIcon from './assets/blockr-icon.svg'
+import { Switch } from './shared/Switch'
+import { countBlocked, useBlockList } from './shared/storage'
 import './App.css'
 
 type ToggleProps = {
@@ -11,26 +12,21 @@ type ToggleProps = {
 function Toggle({ label, checked, onChange }: ToggleProps) {
   return (
     <div className="row">
-      <label className="switch">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-          aria-label={label}
-        />
-        <span className="slider round"></span>
-      </label>
+      <Switch label={label} checked={checked} onChange={onChange} />
       <p>{label}</p>
     </div>
   )
 }
 
 function App() {
-  // UI state only for now; saving to chrome.storage and the actual
-  // blocking come next.
-  const [blockedCount] = useState(0)
-  const [blockSocial, setBlockSocial] = useState(false)
-  const [blockShortForm, setBlockShortForm] = useState(false)
+  const { state, update } = useBlockList()
+
+  // Wait for storage so the popup doesn't flash "0 sites".
+  if (!state) return null
+
+  const blockedCount = countBlocked(state)
+  const setCategory = (category: 'social' | 'shortForm') => (on: boolean) =>
+    update((s) => ({ ...s, categories: { ...s.categories, [category]: on } }))
 
   return (
     <>
@@ -45,15 +41,17 @@ function App() {
         <button id="disableButton">disable</button>
         <Toggle
           label="block social media"
-          checked={blockSocial}
-          onChange={setBlockSocial}
+          checked={state.categories.social}
+          onChange={setCategory('social')}
         />
         <Toggle
           label="block short-form content"
-          checked={blockShortForm}
-          onChange={setBlockShortForm}
+          checked={state.categories.shortForm}
+          onChange={setCategory('shortForm')}
         />
-        <button id="blockListButton">edit block list</button>
+        <button id="blockListButton" onClick={() => chrome.runtime.openOptionsPage()}>
+          edit block list
+        </button>
       </div>
     </>
   )
