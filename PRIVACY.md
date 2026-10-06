@@ -45,4 +45,4 @@ account can be cleared in Chrome's sync settings.
 
 If this policy changes, the updated version will be published at this location with a new date.
 
-Questions: **your-email@example.com**
+Questions: **samadali.developer@gmail.com**
