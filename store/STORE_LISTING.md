@@ -9,7 +9,7 @@ Copy these into the Developer Dashboard. Check the current field limits there.
 **Short description (max 132 characters):**
 Block distracting websites like social media and short-form video, and stay focused. Simple, private, no account needed.
 
-**Category:** Productivity
+**Category:** Productivity (the first group in the list; "Well-being" is the other reasonable fit)
 
 **Language:** English
 
@@ -57,6 +57,11 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 
 ## Assets (in this folder)
 
-- `screenshot-1-options.png`, `screenshot-2-popup.png`, `screenshot-3-blocked.png`: 1280x800 screenshots.
-- `promo-tile-440x280.png`: small promo tile.
-- Icon: `react-app-source/public/icons/icon-128.png`.
+| Dashboard field | File |
+|---|---|
+| Store icon (128x128) | `store-icon-128x128.png` |
+| Screenshots (1280x800, up to 5) | `screenshot-1-options.png`, `screenshot-2-popup.png`, `screenshot-3-blocked.png` |
+| Small promo tile (440x280) | `promo-tile-440x280.png` |
+| Marquee promo tile (1400x560, optional) | `marquee-promo-tile-1400x560.png` |
+
+The extension package itself is `react-app-source/release/blockr-1.0.zip` (`npm run package`).
