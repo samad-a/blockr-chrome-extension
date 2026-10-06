@@ -12,8 +12,8 @@ import { Tabs } from './components/Tabs'
 import type { TabDef } from './components/Tabs'
 import './options.css'
 
-// Placeholder until there is a real donation page.
-const DONATE_URL = 'https://example.com/donate'
+// Ko-fi page (opens in a new tab).
+const DONATE_URL = 'https://ko-fi.com/samaddev'
 
 type TabId = 'custom' | Category
 
