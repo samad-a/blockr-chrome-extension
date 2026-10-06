@@ -2,12 +2,12 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  background-color: var(--pink);
+  background-color: var(--bg);
 }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  color: var(--red);
+  color: var(--text);
 }
 
 .blocked {
@@ -54,9 +54,9 @@ body {
 .blocked button {
   margin-top: 8px;
   padding: 12px 36px;
-  border: 2px solid var(--red);
+  border: 2px solid var(--brand);
   border-radius: 12px;
-  background-color: var(--red);
+  background-color: var(--brand);
   color: #fff;
   font-family: inherit;
   font-size: 22px;
@@ -66,8 +66,8 @@ body {
 }
 
 .blocked button:hover {
-  background-color: #fff;
-  color: var(--red);
+  background-color: var(--surface);
+  color: var(--text);
 }
 
 .blocked button:active {
@@ -75,6 +75,6 @@ body {
 }
 
 .blocked button:focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }

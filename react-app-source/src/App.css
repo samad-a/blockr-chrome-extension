@@ -1,7 +1,7 @@
 /* Popup styles. Colours come from shared/theme.css. */
 
 h1 {
-    color: var(--red);
+    color: var(--text);
     font-size: 28px;
     font-weight: 700;
     font-style: italic;
@@ -9,7 +9,7 @@ h1 {
 }
 
 p {
-    color: var(--red);
+    color: var(--text);
     font-size: 14px;
     margin: 0;
 }
@@ -18,15 +18,15 @@ p {
 .popup {
     margin: 8px;
     padding: 14px 16px 16px;
-    background-color: white;
-    border: 2px solid var(--red);
+    background-color: var(--surface);
+    border: 2px solid var(--brand);
     border-radius: 16px;
 }
 
 button {
-    background-color: var(--red);
+    background-color: var(--brand);
     /* Constant border so hovering recolours the button without changing its size. */
-    border: 2px solid var(--red);
+    border: 2px solid var(--brand);
     color: white;
     border-radius: 12px;
     padding: 9px 20px;
@@ -40,8 +40,8 @@ button {
 }
 
 button:hover {
-    background-color: white;
-    color: var(--red);
+    background-color: var(--surface);
+    color: var(--text);
 }
 
 button:active {
@@ -49,19 +49,19 @@ button:active {
 }
 
 button:focus-visible {
-    outline: 2px solid var(--red);
+    outline: 2px solid var(--brand);
     outline-offset: 2px;
 }
 
 /* Secondary action: outlined, so it doesn't compete with the main button. */
 .secondary {
     width: 100%;
-    background-color: white;
-    color: var(--red);
+    background-color: var(--surface);
+    color: var(--text);
 }
 
 .secondary:hover {
-    background-color: var(--pink);
+    background-color: var(--panel);
 }
 
 .title {
@@ -91,11 +91,11 @@ button:focus-visible {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--red);
+    background-color: var(--brand);
 }
 
 .status.idle .dot {
-    background-color: #b5b5b5;
+    background-color: var(--muted);
 }
 
 .panel {
@@ -106,7 +106,7 @@ button:focus-visible {
     width: 100%;
     padding: 12px 10px;
     border-radius: 12px;
-    background-color: var(--pink);
+    background-color: var(--panel);
 }
 
 .row {
@@ -149,10 +149,10 @@ button:focus-visible {
     flex-direction: column;
     min-width: 150px;
     padding: 6px;
-    background-color: white;
-    border: 2px solid var(--red);
+    background-color: var(--surface);
+    border: 2px solid var(--brand);
     border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(213, 73, 73, 0.3);
+    box-shadow: 0 4px 14px var(--shadow);
 }
 
 .pause-menu-title {
@@ -165,15 +165,15 @@ button:focus-visible {
     border: 2px solid transparent;
     border-radius: 8px;
     background: none;
-    color: var(--red);
+    color: var(--text);
     font-size: 14px;
     letter-spacing: 0;
     text-align: left;
 }
 
 .menu-item:hover {
-    background-color: var(--pink);
-    color: var(--red);
+    background-color: var(--panel);
+    color: var(--text);
 }
 
 .menu-item:active {
@@ -182,4 +182,33 @@ button:focus-visible {
 
 .title img {
     height: 36px;
+}
+
+/* lock indicator and password prompt */
+.icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    padding: 6px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: none;
+    color: var(--text);
+}
+
+.icon-button:hover {
+    background-color: var(--panel);
+    color: var(--text);
+}
+
+.prompt-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.prompt-links {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import blockrIcon from '../assets/blockr-icon.svg'
+import { activeSites } from '../shared/blocking'
 import { incrementBlockCount } from '../shared/local'
+import { loadState } from '../shared/storage'
+import { useTheme } from '../shared/theme'
 import './blocked.css'
 
 const params = new URLSearchParams(window.location.search)
@@ -21,10 +24,15 @@ async function goBack() {
 }
 
 export default function BlockedApp() {
+  useTheme()
+
   useEffect(() => {
     if (counted || !url) return
     counted = true
-    incrementBlockCount(url)
+    // Any web page can open this page with any ?url=..., so only count sites really on the list.
+    loadState().then((state) => {
+      if (activeSites(state).some((site) => site.url === url)) incrementBlockCount(url)
+    })
   }, [])
 
   return (

@@ -21,7 +21,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--red-light);
+  background-color: var(--soft);
   transition: 0.4s;
 }
 
@@ -37,7 +37,7 @@
 }
 
 input:checked + .slider {
-  background-color: var(--red);
+  background-color: var(--brand);
 }
 
 input:checked + .slider:before {
@@ -72,6 +72,6 @@ input:checked + .slider:before {
 
 /* Keyboard focus ring for the hidden checkbox */
 .switch input:focus-visible + .slider {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }

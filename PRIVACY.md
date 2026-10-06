@@ -1,6 +1,6 @@
 # Blockr Privacy Policy
 
-_Last updated: 6 October 2026_
+_Last updated: 10 October 2026_
 
 Blockr is a Chrome extension that blocks websites you choose, to help you stay focused.
 **Blockr does not collect, transmit, or share any personal data.** It has no servers, no
@@ -14,7 +14,10 @@ Everything Blockr stores stays inside your browser, using Chrome's extension sto
 |---|---|---|
 | The sites you add to your block list (name, URL, date added, on/off) | `chrome.storage.sync` | So your list persists. Chrome may sync it across your own devices through your Google account; Blockr itself never sees or sends it. |
 | Which preset sites and categories (social media, short-form content) are switched on | `chrome.storage.sync` | So your choices persist. |
+| Your colour theme choice (system, light or dark) | `chrome.storage.sync` | So the popup, options page and blocked page match. |
 | How many times each site was blocked, and whether blocking is paused | `chrome.storage.local` | To show "times blocked" and to resume after a pause. Stays on this device. |
+| If you turn on password protection: a salted hash of your password, plus failed-attempt and reset timers | `chrome.storage.local` | To check the password and to enforce waiting periods. The password itself is never stored, and the hash never leaves this device. |
+| Whether Blockr is currently unlocked | `chrome.storage.session` | Kept in memory only and cleared when the browser closes. |
 
 ## What Blockr does not do
 

@@ -1,12 +1,12 @@
 html,
 body {
   margin: 0;
-  background-color: var(--pink);
+  background-color: var(--bg);
 }
 
 body {
   font-family: 'DM Sans', sans-serif;
-  color: var(--red);
+  color: var(--text);
 }
 
 .options {
@@ -56,9 +56,9 @@ body {
 .pill {
   display: inline-block;
   box-sizing: border-box;
-  background-color: var(--red);
+  background-color: var(--pill);
   color: #fff;
-  border: 2px solid var(--red);
+  border: 2px solid var(--pill);
   border-radius: 999px;
   padding: 3px 14px;
   font-family: inherit;
@@ -71,8 +71,8 @@ body {
 }
 
 .pill:hover {
-  background-color: #fff;
-  color: var(--red);
+  background-color: var(--surface);
+  color: var(--text);
 }
 
 .pill:active {
@@ -80,15 +80,20 @@ body {
 }
 
 .pill-light {
-  background-color: var(--red-light);
-  border-color: var(--red-light);
+  background-color: var(--surface);
+  color: var(--text);
+  border-color: var(--pill);
+}
+
+.pill-light:hover {
+  background-color: var(--panel);
 }
 
 .pill:focus-visible,
 .tab:focus-visible,
 .add-button:focus-visible,
 .text-input:focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
 }
 
@@ -104,8 +109,8 @@ body {
   border: none;
   border-radius: 10px 10px 0 0;
   padding: 8px 12px;
-  background-color: #e6e6e6;
-  color: #444;
+  background-color: var(--tab-off);
+  color: var(--tab-off-text);
   font-family: inherit;
   font-size: 18px;
   font-weight: 700;
@@ -113,18 +118,18 @@ body {
 }
 
 .tab:hover {
-  background-color: #dcdcdc;
+  background-color: var(--tab-off-hover);
 }
 
 .tab.active {
-  background-color: #fff;
-  color: var(--red);
+  background-color: var(--surface);
+  color: var(--text);
 }
 
 /* ---------- card + table ---------- */
 
 .card {
-  background-color: #fff;
+  background-color: var(--surface);
   border-radius: 0 12px 12px 12px;
   padding: 16px;
   min-height: 320px;
@@ -135,7 +140,7 @@ body {
   margin: 0 0 12px;
   padding: 8px 12px;
   border-radius: 8px;
-  background-color: var(--pink);
+  background-color: var(--panel);
   font-size: 14px;
 }
 
@@ -167,7 +172,7 @@ body {
 
 .site-table td {
   padding: 6px 8px;
-  background-color: #f3f3f3;
+  background-color: var(--row);
 }
 
 .site-table td:first-child {
@@ -216,7 +221,7 @@ body {
 }
 
 .favicon-fallback {
-  background-color: #aaa;
+  background-color: var(--placeholder-icon);
 }
 
 /* ---------- editing + adding ---------- */
@@ -231,16 +236,16 @@ body {
   box-sizing: border-box;
   width: 100%;
   padding: 4px 8px;
-  border: 1px solid var(--red-light);
+  border: 1px solid var(--soft);
   border-radius: 6px;
-  background-color: #fff;
-  color: var(--red);
+  background-color: var(--surface);
+  color: var(--text);
   font-family: inherit;
   font-size: 14px;
 }
 
 .text-input[aria-invalid='true'] {
-  border-color: var(--red);
+  border-color: var(--brand);
   border-width: 2px;
 }
 
@@ -256,7 +261,7 @@ body {
   padding: 8px;
   border: none;
   background: none;
-  color: #777;
+  color: var(--muted);
   font-family: inherit;
   font-size: 14px;
   text-align: left;
@@ -264,7 +269,7 @@ body {
 }
 
 .add-button:hover {
-  color: var(--red);
+  color: var(--text);
 }
 
 .plus {
@@ -280,4 +285,142 @@ body {
   padding: 4px;
   background-color: #fff;
   object-fit: contain;
+}
+
+/* ---------- settings tab ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 560px;
+  padding: 8px;
+}
+
+.settings-section h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.settings-help,
+.settings-note,
+.settings-message {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.settings-note {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.settings-message {
+  margin: 10px 0 0;
+  font-weight: 700;
+}
+
+.segmented {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--pill);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.segment {
+  position: relative;
+  padding: 6px 18px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.segment.selected {
+  background-color: var(--pill);
+  color: #fff;
+}
+
+.segment:focus-within {
+  outline: 2px solid var(--brand);
+  outline-offset: -4px;
+}
+
+.password-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.password-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pill:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- lock screen ---------- */
+
+.lock-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-sizing: border-box;
+  max-width: 380px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px;
+  text-align: center;
+}
+
+.lock-screen .brand img {
+  height: 48px;
+}
+
+.lock-screen h2 {
+  margin: 8px 0 0;
+  font-size: 28px;
+}
+
+.lock-screen p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.lock-reset {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.lock-reset p {
+  margin-bottom: 6px;
+  font-size: 13px;
 }

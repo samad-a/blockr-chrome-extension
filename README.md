@@ -23,6 +23,8 @@ Chrome Web Store: _coming soon_ · [Privacy policy](PRIVACY.md) · [Support the 
 - **Ready-made lists:** social media (Instagram, TikTok, X, Facebook, Reddit) and short-form content (YouTube Shorts, TikTok, Instagram Reels). Every site has its own toggle.
 - **One-click controls:** the popup has master switches for social media and short-form content.
 - **Pause when you need to:** disable blocking, or pause for 15 minutes, 1 hour, or until tomorrow. It resumes automatically.
+- **Password protection (optional):** require a password to open the block list, or to pause or turn off blocking. Forgot it? A 6-hour cooling-off reset removes the password, and you can cancel it. It's a speed bump against impulsive changes, not a vault: Chrome still lets you disable or remove any extension.
+- **Light and dark themes:** follow your system setting, or choose one. Colours are tuned for WCAG AA contrast.
 - **Catches in-page navigation:** sites like YouTube that change page without reloading are still blocked.
 - **A calm blocked page:** shows which site was blocked, with a button to go back.
 - **See your progress:** each site shows how many times it has been blocked.

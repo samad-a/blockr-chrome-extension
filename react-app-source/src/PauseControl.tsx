@@ -18,7 +18,13 @@ const PAUSE_OPTIONS: { label: string; until: () => number }[] = [
 ]
 
 /** "disable" / "enable" button with a drop-down for pausing blocking for a while. */
-export function PauseControl({ pause }: { pause: Pause }) {
+type PauseControlProps = {
+  pause: Pause
+  /** Runs the action now, or after the password is entered when a lock is set. */
+  requireUnlock: (action: () => void) => void
+}
+
+export function PauseControl({ pause, requireUnlock }: PauseControlProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const paused = isPaused(pause)
@@ -42,7 +48,8 @@ export function PauseControl({ pause }: { pause: Pause }) {
       <button
         id="disableButton"
         className="split-main"
-        onClick={() => setPause(paused ? null : { until: null })}
+        // Resuming blocking is always allowed; pausing it needs the password.
+        onClick={() => (paused ? setPause(null) : requireUnlock(() => setPause({ until: null })))}
       >
         {paused ? 'enable' : 'disable'}
       </button>
@@ -66,8 +73,8 @@ export function PauseControl({ pause }: { pause: Pause }) {
               role="menuitem"
               className="menu-item"
               onClick={() => {
-                setPause({ until: option.until() })
                 setOpen(false)
+                requireUnlock(() => setPause({ until: option.until() }))
               }}
             >
               {option.label}

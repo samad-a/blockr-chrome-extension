@@ -3,9 +3,13 @@ import blockrIcon from '../assets/blockr-icon.svg'
 import { isPresetEnabled } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
+import { useLock } from '../shared/useLock'
+import { useTheme } from '../shared/theme'
 import { useBlockList } from '../shared/useBlockList'
 import { useLocalState } from '../shared/useLocalState'
 import type { Category } from '../shared/types'
+import { LockScreen } from './components/LockScreen'
+import { SettingsPanel } from './components/SettingsPanel'
 import { SiteTable } from './components/SiteTable'
 import type { SiteRowData } from './components/SiteRow'
 import { Tabs } from './components/Tabs'
@@ -15,12 +19,13 @@ import './options.css'
 // Ko-fi page (opens in a new tab).
 const DONATE_URL = 'https://ko-fi.com/samaddev'
 
-type TabId = 'custom' | Category
+type TabId = 'custom' | Category | 'settings'
 
 const TABS: TabDef<TabId>[] = [
   { id: 'custom', label: 'Custom Block List' },
   { id: 'social', label: 'Social Media' },
   { id: 'shortForm', label: 'Short-Form Content' },
+  { id: 'settings', label: 'Settings' },
 ]
 
 const CATEGORY_LABEL: Record<Category, string> = {
@@ -31,9 +36,15 @@ const CATEGORY_LABEL: Record<Category, string> = {
 export default function OptionsApp() {
   const { state, update, error } = useBlockList()
   const { blockCounts } = useLocalState()
+  const lock = useLock()
+  const { theme, setTheme } = useTheme()
   const [tab, setTab] = useState<TabId>('custom')
 
-  if (!state) return null
+  // Wait for storage (including the lock) so a locked page never flashes its contents.
+  if (!state || !lock.ready) return null
+  if (lock.locked) {
+    return <LockScreen resetAt={lock.resetAt} lockedUntil={lock.lockedUntil} now={lock.now} />
+  }
 
   const customRows: SiteRowData[] = state.customSites.map((s) => ({
     ...s,
@@ -93,6 +104,8 @@ export default function OptionsApp() {
               }))
             }
           />
+        ) : tab === 'settings' ? (
+          <SettingsPanel theme={theme} onThemeChange={setTheme} hasPassword={lock.hasPassword} />
         ) : (
           <>
             <div className="master">

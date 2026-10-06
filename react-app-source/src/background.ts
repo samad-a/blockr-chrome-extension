@@ -2,6 +2,7 @@
 import { activeSites, blockedPagePath, buildRules, findMatch } from './shared/blocking'
 import type { ActiveSite } from './shared/blocking'
 import { isPaused, loadLocal, setPause } from './shared/local'
+import { RESET_ALARM, completeResetIfDue, rearmResetAlarm } from './shared/lockActions'
 import { loadState } from './shared/storage'
 
 const PAUSE_ALARM = 'blockr-pause-end'
@@ -51,7 +52,10 @@ const refresh = () => {
 }
 
 chrome.runtime.onInstalled.addListener(refresh)
-chrome.runtime.onStartup.addListener(refresh)
+chrome.runtime.onStartup.addListener(() => {
+  refresh()
+  rearmResetAlarm()
+})
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'sync' || (area === 'local' && changes.pause)) refresh()
@@ -59,6 +63,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === PAUSE_ALARM) setPause(null)
+  if (alarm.name === RESET_ALARM) completeResetIfDue()
 })
 
 // Redirect rules only see full page loads. Sites like YouTube change page

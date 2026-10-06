@@ -1,5 +1,64 @@
+/*
+ * Colour tokens. Light is the default. Dark applies when the system prefers it
+ * (unless the user forced light) or when the user forced dark (data-theme="dark").
+ * The dark values are therefore listed twice; keep the two blocks in sync.
+ *
+ * --brand is the logo red, used for fills, borders and large text.
+ * --text / --pill are deeper reds so small text and white-on-red pills reach
+ * the 4.5:1 WCAG AA contrast ratio.
+ */
 :root {
-  --pink: #ffeeee;
-  --red: #d54949;
-  --red-light: #dc9494;
+  color-scheme: light;
+  --bg: #ffeeee;
+  --surface: #ffffff;
+  --panel: #ffeeee;
+  --row: #f3f3f3;
+  --brand: #d54949;
+  --pill: #b83232;
+  --text: #b83232;
+  --muted: #6b6b6b;
+  --soft: #dc9494;
+  --tab-off: #e6e6e6;
+  --tab-off-hover: #dcdcdc;
+  --tab-off-text: #444444;
+  --placeholder-icon: #aaaaaa;
+  --shadow: rgba(213, 73, 73, 0.3);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #1a1213;
+  --surface: #261a1c;
+  --panel: #332124;
+  --row: #312729;
+  --brand: #d54949;
+  --pill: #c94242;
+  --text: #f4a0a0;
+  --muted: #b9a9ab;
+  --soft: #5b3a3e;
+  --tab-off: #3a2a2c;
+  --tab-off-hover: #463436;
+  --tab-off-text: #dccdcf;
+  --placeholder-icon: #6e6062;
+  --shadow: rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #1a1213;
+    --surface: #261a1c;
+    --panel: #332124;
+    --row: #312729;
+    --brand: #d54949;
+    --pill: #c94242;
+    --text: #f4a0a0;
+    --muted: #b9a9ab;
+    --soft: #5b3a3e;
+    --tab-off: #3a2a2c;
+    --tab-off-hover: #463436;
+    --tab-off-text: #dccdcf;
+    --placeholder-icon: #6e6062;
+    --shadow: rgba(0, 0, 0, 0.55);
+  }
 }

@@ -1,0 +1,89 @@
+/* Password form shared by the popup prompt and the options lock screen. */
+
+.unlock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.unlock-input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid var(--soft);
+  border-radius: 10px;
+  background-color: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.unlock-input[aria-invalid='true'] {
+  border-color: var(--brand);
+}
+
+.unlock-input:focus-visible,
+.unlock-submit:focus-visible,
+.link-button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.unlock-submit {
+  padding: 8px 18px;
+  border: 2px solid var(--pill);
+  border-radius: 10px;
+  background-color: var(--pill);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.unlock-submit:hover:not(:disabled) {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.unlock-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.unlock-message {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Text-style button, e.g. "forgot password?" */
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  background: none;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.unlock-submit:disabled:hover {
+  background-color: var(--pill);
+  color: #fff;
+}
