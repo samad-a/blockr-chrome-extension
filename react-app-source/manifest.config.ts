@@ -9,6 +9,8 @@ export default defineManifest({
   description:
     'Extension that allows the user to block websites, to stay productive and focused.',
   version: '1.0',
+  // The favicon and declarativeNetRequest redirect features need a reasonably recent Chrome.
+  minimum_chrome_version: '116',
   icons: {
     16: 'public/icons/icon-16.png',
     32: 'public/icons/icon-32.png',
