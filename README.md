@@ -67,6 +67,15 @@ navigation, and tabs already open on a newly blocked site are moved to the block
 Block counters and the pause state are kept in `chrome.storage.local`, and your list in
 `chrome.storage.sync`.
 
+## License
+
+Blockr is free software, released under the [GNU General Public License v3.0](LICENSE).
+You're welcome to read, learn from, and build on the code, but anything you distribute that
+includes it must also be released under the GPL, with credit to the original.
+Copyright (C) 2026 Samad Ali.
+
+The Blockr name and logo are not covered by this license and may not be used for other projects.
+
 ## Feedback and support
 
 This is my first Chrome extension, and feedback is welcome. Please
