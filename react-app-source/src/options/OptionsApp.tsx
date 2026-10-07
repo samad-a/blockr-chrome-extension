@@ -162,8 +162,9 @@ export default function OptionsApp() {
               rows={PRESETS_BY_CATEGORY[tab].map((p) => ({
                 id: p.id,
                 name: p.name,
-                url: p.url,
-                timesBlocked: blockCounts[p.url] ?? 0,
+                url: p.urls[0],
+                urlLabel: p.urls.join(', '),
+                timesBlocked: p.urls.reduce((total, url) => total + (blockCounts[url] ?? 0), 0),
                 enabled: isPresetEnabled(state, p.id),
                 editable: false,
               }))}

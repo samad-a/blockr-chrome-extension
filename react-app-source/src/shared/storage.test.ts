@@ -23,13 +23,13 @@ describe('countBlocked', () => {
     expect(countBlocked({ ...DEFAULT_STATE, presetEnabled })).toBe(0)
     expect(
       countBlocked({ ...DEFAULT_STATE, presetEnabled, categories: { social: true, shortForm: false } }),
-    ).toBe(2)
+    ).toBe(4)
   })
 
   it('treats presets as on unless switched off', () => {
     const categories = { social: true, shortForm: false }
-    expect(countBlocked({ ...DEFAULT_STATE, categories })).toBe(5)
-    expect(countBlocked({ ...DEFAULT_STATE, categories, presetEnabled: { 'social-reddit': false } })).toBe(4)
+    expect(countBlocked({ ...DEFAULT_STATE, categories })).toBe(7)
+    expect(countBlocked({ ...DEFAULT_STATE, categories, presetEnabled: { 'social-reddit': false } })).toBe(6)
   })
 
   it('counts a URL once even if it is in several lists', () => {
@@ -42,6 +42,10 @@ describe('countBlocked', () => {
         'social-reddit': false,
         'short-youtube-shorts': false,
         'short-instagram-reels': false,
+        'social-snapchat': false,
+        'social-threads': false,
+        'short-facebook-reels': false,
+        'short-snapchat-spotlight': false,
       },
       categories: { social: true, shortForm: true },
     }

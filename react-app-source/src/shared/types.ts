@@ -17,7 +17,8 @@ export type CustomSite = {
 export type PresetSite = {
   id: string
   name: string
-  url: string
+  /** Every address the site is known by, e.g. x.com and twitter.com. */
+  urls: string[]
   category: Category
 }
 

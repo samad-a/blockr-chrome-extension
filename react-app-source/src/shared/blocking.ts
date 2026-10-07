@@ -3,7 +3,14 @@ import type { BlockListState } from './types'
 import { EMPTY_USAGE, dayKey, secondsUsed } from './usage'
 import type { LimitedSite, Usage } from './usage'
 
-export type ActiveSite = { name: string; url: string; /** Set when blocked because a daily limit ran out. */ limitMinutes?: number }
+export type ActiveSite = {
+  name: string
+  url: string
+  /** Identifies the site the user sees (a preset can cover several addresses), so it is counted once. */
+  key: string
+  /** Set when blocked because a daily limit ran out. */
+  limitMinutes?: number
+}
 
 /** Presets are on unless the user has switched them off. */
 export const isPresetEnabled = (state: BlockListState, id: string) => state.presetEnabled[id] ?? true
@@ -32,23 +39,22 @@ export function activeSites(
       allowedByLimit.add(site.url)
       continue
     }
-    byUrl.set(site.url, { name: site.name, url: site.url, limitMinutes: site.dailyLimit })
+    byUrl.set(site.url, { name: site.name, url: site.url, key: `custom:${site.url}`, limitMinutes: site.dailyLimit })
   }
   for (const preset of ALL_PRESETS) {
-    if (
-      state.categories[preset.category] &&
-      isPresetEnabled(state, preset.id) &&
-      !byUrl.has(preset.url) &&
-      !allowedByLimit.has(preset.url) // a custom limit on the same site overrides the preset
-    ) {
-      byUrl.set(preset.url, { name: preset.name, url: preset.url })
+    if (!state.categories[preset.category] || !isPresetEnabled(state, preset.id)) continue
+    for (const url of preset.urls) {
+      // A custom entry for the same address wins, and so does a custom daily limit on it.
+      if (byUrl.has(url) || allowedByLimit.has(url)) continue
+      byUrl.set(url, { name: preset.name, url, key: `preset:${preset.id}` })
     }
   }
   return [...byUrl.values()]
 }
 
+/** Number of sites blocked right now, as the user sees them (a preset with two addresses counts once). */
 export const countBlocked = (state: BlockListState, usage: Usage = EMPTY_USAGE, today: string = dayKey()) =>
-  activeSites(state, usage, today).length
+  new Set(activeSites(state, usage, today).map((site) => site.key)).size
 
 /**
  * Does `pageUrl` fall under a block entry like "tiktok.com" or "youtube.com/shorts"?

@@ -9,6 +9,8 @@ export type SiteRowData = {
   id: string
   name: string
   url: string
+  /** Shown instead of `url` when a site has several addresses, e.g. "x.com, twitter.com". */
+  urlLabel?: string
   /** Epoch ms. Presets have none. */
   dateAdded?: number
   timesBlocked: number
@@ -59,7 +61,7 @@ export function SiteRow({ site, showLimit, otherUrls, onToggle, onEdit, onDelete
         <Favicon url={site.url} />
       </td>
       <td className="cell-name">{site.name}</td>
-      <td className="cell-url">{site.url}</td>
+      <td className="cell-url">{site.urlLabel ?? site.url}</td>
       {site.dateAdded && (
         <td className="cell-date" data-label="Added">
           {formatDate(site.dateAdded)}

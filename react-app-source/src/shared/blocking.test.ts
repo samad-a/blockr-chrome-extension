@@ -36,10 +36,16 @@ describe('activeSites', () => {
   it('combines enabled custom sites and presets with their category on, without duplicates', () => {
     const state: BlockListState = {
       customSites: [site('tiktok.com', true), site('off.com', false)],
-      presetEnabled: { 'social-instagram': false, 'social-x': false, 'social-facebook': false },
+      presetEnabled: {
+        'social-instagram': false,
+        'social-x': false,
+        'social-facebook': false,
+        'social-snapchat': false,
+        'social-threads': false,
+      },
       categories: { social: true, shortForm: false },
     }
-    expect(activeSites(state).map((s) => s.url)).toEqual(['tiktok.com', 'reddit.com'])
+    expect(activeSites(state).map((s) => s.url)).toEqual(['tiktok.com', 'reddit.com', 'redd.it'])
   })
 
   it('is empty by default', () => {
@@ -49,7 +55,7 @@ describe('activeSites', () => {
 
 describe('findMatch', () => {
   it('returns the matching site', () => {
-    const sites = [{ name: 'Reddit', url: 'reddit.com' }]
+    const sites = [{ name: 'Reddit', url: 'reddit.com', key: 'preset:social-reddit' }]
     expect(findMatch(sites, 'https://old.reddit.com/r/x')).toEqual(sites[0])
     expect(findMatch(sites, 'https://example.com')).toBeUndefined()
   })
@@ -58,19 +64,19 @@ describe('findMatch', () => {
 describe('buildRules', () => {
   it('creates one main_frame redirect rule per site with unique ids', () => {
     const rules = buildRules([
-      { name: 'TikTok', url: 'tiktok.com' },
-      { name: 'Shorts', url: 'youtube.com/shorts' },
+      { name: 'TikTok', url: 'tiktok.com', key: 'a' },
+      { name: 'Shorts', url: 'youtube.com/shorts', key: 'b' },
     ])
     expect(rules.map((r) => r.id)).toEqual([1, 2])
     expect(rules[1].condition.urlFilter).toBe('||youtube.com/shorts^')
     expect(rules[1].condition.resourceTypes).toEqual(['main_frame'])
     expect(rules[0].action.redirect?.extensionPath).toBe(
-      blockedPagePath({ name: 'TikTok', url: 'tiktok.com' }),
+      blockedPagePath({ name: 'TikTok', url: 'tiktok.com', key: 'a' }),
     )
   })
 
   it('encodes names in the blocked page path', () => {
-    expect(blockedPagePath({ name: 'A & B', url: 'a.com' })).toBe('/blocked.html?site=A%20%26%20B&url=a.com')
+    expect(blockedPagePath({ name: 'A & B', url: 'a.com', key: 'a' })).toBe('/blocked.html?site=A%20%26%20B&url=a.com')
   })
 })
 
@@ -123,5 +129,41 @@ describe('daily limits', () => {
     expect(urls).toContain('reddit.com')
     const used = addUsage(EMPTY_USAGE, ['tiktok.com'], 15 * 60, TODAY)
     expect(activeSites(withPreset, used, TODAY).map((s) => s.url)).toContain('tiktok.com')
+  })
+})
+
+describe('presets with several addresses', () => {
+  const social: BlockListState = { ...DEFAULT_STATE, categories: { social: true, shortForm: false } }
+
+  it('blocks every address of a preset but counts it as one site', () => {
+    const only = (id: string): BlockListState => ({
+      ...social,
+      presetEnabled: Object.fromEntries(
+        ['instagram', 'tiktok', 'x', 'facebook', 'reddit', 'snapchat', 'threads'].filter((n) => n !== id).map((n) => [`social-${n}`, false]),
+      ),
+    })
+    const x = only('x')
+    expect(activeSites(x).map((s) => s.url)).toEqual(['x.com', 'twitter.com'])
+    expect(countBlocked(x)).toBe(1)
+    expect(activeSites(only('reddit')).map((s) => s.url)).toEqual(['reddit.com', 'redd.it'])
+    expect(activeSites(only('threads')).map((s) => s.url)).toEqual(['threads.net', 'threads.com'])
+  })
+
+  it('matches pages on either address', () => {
+    const sites = activeSites(social)
+    expect(findMatch(sites, 'https://twitter.com/home')?.name).toBe('X')
+    expect(findMatch(sites, 'https://redd.it/abc')?.name).toBe('Reddit')
+    expect(findMatch(sites, 'https://www.fb.com/')?.name).toBe('Facebook')
+  })
+
+  it('covers both address forms of a reel, but not the rest of the site', () => {
+    const shortForm: BlockListState = { ...DEFAULT_STATE, categories: { social: false, shortForm: true } }
+    const sites = activeSites(shortForm)
+    expect(findMatch(sites, 'https://www.instagram.com/reels/')?.name).toBe('Instagram Reels')
+    expect(findMatch(sites, 'https://www.instagram.com/reel/Cabc123/')?.name).toBe('Instagram Reels')
+    expect(findMatch(sites, 'https://www.facebook.com/reel/123')?.name).toBe('Facebook Reels')
+    expect(findMatch(sites, 'https://www.snapchat.com/spotlight/x')?.name).toBe('Snapchat Spotlight')
+    expect(findMatch(sites, 'https://www.instagram.com/someone/')).toBeUndefined()
+    expect(findMatch(sites, 'https://www.facebook.com/someone')).toBeUndefined()
   })
 })
