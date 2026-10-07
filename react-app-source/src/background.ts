@@ -10,6 +10,7 @@ import { loadState } from './shared/storage'
 import { IDLE_SECONDS, bankElapsed, trackedSiteUrls } from './shared/tracking'
 import type { TrackerState } from './shared/tracking'
 import { dayKey, exhaustedUrls } from './shared/usage'
+import { WELCOME_PATH, WELCOME_SEEN_KEY, shouldShowWelcome } from './shared/welcome'
 
 const PAUSE_ALARM = 'blockr-pause-end'
 const SCHEDULE_ALARM = 'blockr-schedule-change'
@@ -152,7 +153,20 @@ const startUp = () => {
     .catch((e) => console.error('Blockr: migration failed', e))
     .finally(refresh)
 }
-chrome.runtime.onInstalled.addListener(startUp)
+/** After a first install, open the welcome page once (never on updates, never twice). */
+async function openWelcomeOnce() {
+  const data = await chrome.storage.sync.get(null)
+  if (!shouldShowWelcome(data)) return
+  await chrome.storage.sync.set({ [WELCOME_SEEN_KEY]: true })
+  await chrome.tabs.create({ url: chrome.runtime.getURL(WELCOME_PATH) })
+}
+
+chrome.runtime.onInstalled.addListener((details) => {
+  startUp()
+  if (details.reason === 'install') openWelcomeOnce().catch((e) => console.error('Blockr: welcome failed', e))
+  // After an update, the options page shows a short "what's new" note once.
+  if (details.reason === 'update') chrome.storage.local.set({ whatsNewFor: chrome.runtime.getManifest().version })
+})
 chrome.runtime.onStartup.addListener(() => {
   startUp()
   rearmResetAlarm()

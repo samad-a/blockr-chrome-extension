@@ -1,5 +1,8 @@
 import type { Theme } from '../../shared/theme'
 import type { Schedule } from '../../shared/schedule'
+import type { CustomSite } from '../../shared/types'
+import { AboutSettings } from './AboutSettings'
+import { BackupSettings } from './BackupSettings'
 import { PasswordSettings } from './PasswordSettings'
 import { PrivateWindowsSettings } from './PrivateWindowsSettings'
 import { ScheduleSettings } from './ScheduleSettings'
@@ -11,9 +14,19 @@ type SettingsPanelProps = {
   hasPassword: boolean
   schedule: Schedule
   onScheduleChange: (schedule: Schedule) => void
+  customSites: CustomSite[]
+  onCustomSitesChange: (sites: CustomSite[]) => void
 }
 
-export function SettingsPanel({ theme, onThemeChange, hasPassword, schedule, onScheduleChange }: SettingsPanelProps) {
+export function SettingsPanel({
+  theme,
+  onThemeChange,
+  hasPassword,
+  schedule,
+  onScheduleChange,
+  customSites,
+  onCustomSitesChange,
+}: SettingsPanelProps) {
   return (
     <div className="settings">
       <section className="settings-section">
@@ -25,8 +38,10 @@ export function SettingsPanel({ theme, onThemeChange, hasPassword, schedule, onS
         <ThemePicker theme={theme} onChange={onThemeChange} />
       </section>
       <ScheduleSettings schedule={schedule} onChange={onScheduleChange} />
+      <BackupSettings sites={customSites} onSitesChange={onCustomSitesChange} />
       <PasswordSettings hasPassword={hasPassword} />
       <PrivateWindowsSettings />
+      <AboutSettings />
     </div>
   )
 }

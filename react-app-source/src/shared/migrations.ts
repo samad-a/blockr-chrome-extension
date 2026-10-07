@@ -33,13 +33,13 @@ const toVersion2: Migration = (data) => {
 const MIGRATIONS: Record<number, Migration> = { 2: toVersion2 }
 
 /** Keys that mean "Blockr already stored something" (as opposed to a brand-new install). */
-const HAS_BLOCKLIST_DATA = (data: SyncData) =>
+export const hasBlocklistData = (data: SyncData) =>
   'customSites' in data || 'presetEnabled' in data || 'categories' in data || Object.keys(data).some((k) => k.startsWith(SITE_PREFIX))
 
 export function detectVersion(data: SyncData): number {
   const stored = data[VERSION_KEY]
   if (typeof stored === 'number' && Number.isInteger(stored) && stored >= 1) return stored
-  return HAS_BLOCKLIST_DATA(data) ? 1 : CURRENT_VERSION // nothing stored yet: nothing to upgrade
+  return hasBlocklistData(data) ? 1 : CURRENT_VERSION // nothing stored yet: nothing to upgrade
 }
 
 export type MigrationPlan = { from: number; set: SyncData; remove: string[] }

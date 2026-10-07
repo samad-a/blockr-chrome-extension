@@ -20,12 +20,14 @@ Chrome Web Store: _coming soon_ · [Privacy policy](PRIVACY.md) · [Support the 
 ## Features
 
 - **Your own block list:** add any site, then edit, delete, or switch it on and off.
-- **Ready-made lists:** social media (Instagram, TikTok, X, Facebook, Reddit) and short-form content (YouTube Shorts, TikTok, Instagram Reels). Every site has its own toggle.
+- **Ready-made lists:** social media (Instagram, TikTok, X, Facebook, Reddit, Snapchat, Threads) and short-form content (YouTube Shorts, TikTok, Instagram Reels, Facebook Reels, Snapchat Spotlight). Every site has its own toggle, and each preset covers all of its addresses (for example X blocks `x.com` and `twitter.com`).
 - **One-click controls:** the popup has master switches for social media and short-form content.
 - **Pause when you need to:** disable blocking, or pause for 15 minutes, 1 hour, or until tomorrow. It resumes automatically.
 - **Daily time limits (optional):** give a custom site a limit such as 20 minutes a day. Time counts while you're watching the site (active tab, focused window, no input-free gap of 2.5 minutes) or any of its tabs is playing sound. Once used up, it's blocked until local midnight.
 - **Block schedule (optional):** only block on chosen days and hours, such as work hours, including overnight windows.
 - **Password protection (optional):** require a password to open the block list, or to pause or turn off blocking. Forgot it? A 6-hour cooling-off reset removes the password, and you can cancel it. It's a speed bump against impulsive changes, not a vault: Chrome still lets you disable or remove any extension.
+- **Backup and restore:** export your custom list to a file and add sites from a file. Importing only adds, and skips duplicates.
+- **Private-windows prompt:** Blockr tells you if it is off in private windows and takes you to the switch.
 - **Light and dark themes:** follow your system setting, or choose one. Colours are tuned for WCAG AA contrast.
 - **Catches in-page navigation:** sites like YouTube that change page without reloading are still blocked.
 - **A calm blocked page:** shows which site was blocked, with a button to go back.

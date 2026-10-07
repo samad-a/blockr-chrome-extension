@@ -11,9 +11,19 @@ type SiteTableProps = {
   onDelete?: (id: string) => void
   /** Providing this shows the "+ Add new item" row. */
   onAdd?: (name: string, url: string, dailyLimit: number | undefined) => void
+  /** When set, the add row shows this instead of the add button. */
+  addDisabledReason?: string
 }
 
-export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAdd }: SiteTableProps) {
+export function SiteTable({
+  rows,
+  emptyMessage,
+  onToggle,
+  onEdit,
+  onDelete,
+  onAdd,
+  addDisabledReason,
+}: SiteTableProps) {
   const [adding, setAdding] = useState(false)
   const allUrls = rows.map((r) => r.url)
   // Only the custom list (the one you can add to) supports daily limits.
@@ -65,12 +75,16 @@ export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAd
           ) : (
             <tr className="site-row add-row">
               <td colSpan={7}>
-                <button type="button" className="add-button" onClick={() => setAdding(true)}>
-                  <span className="plus" aria-hidden>
-                    +
-                  </span>
-                  Add new item to block list
-                </button>
+                {addDisabledReason ? (
+                  <p className="add-disabled">{addDisabledReason}</p>
+                ) : (
+                  <button type="button" className="add-button" onClick={() => setAdding(true)}>
+                    <span className="plus" aria-hidden>
+                      +
+                    </span>
+                    Add new item to block list
+                  </button>
+                )}
               </td>
             </tr>
           ))}

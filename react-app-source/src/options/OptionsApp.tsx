@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import blockrIcon from '../assets/blockr-icon.svg'
+import { MAX_CUSTOM_SITES } from '../shared/backup'
 import { isPresetEnabled, limitedSites } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
@@ -14,6 +15,7 @@ import { useLocalState } from '../shared/useLocalState'
 import type { Category } from '../shared/types'
 import { LockScreen } from './components/LockScreen'
 import { PrivateWindowsNotice } from './components/PrivateWindowsNotice'
+import { WhatsNewNotice } from './components/WhatsNewNotice'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SiteTable } from './components/SiteTable'
 import type { SiteRowData } from './components/SiteRow'
@@ -44,7 +46,8 @@ export default function OptionsApp() {
   const lock = useLock()
   const { theme, setTheme } = useTheme()
   const { schedule, setSchedule, loaded: scheduleLoaded } = useSchedule()
-  const [tab, setTab] = useState<TabId>('custom')
+  // The welcome page links to #settings.
+  const [tab, setTab] = useState<TabId>(() => (window.location.hash === '#settings' ? 'settings' : 'custom'))
 
   // Wait for storage (including the lock) so a locked page never flashes its contents.
   if (!state || !lock.ready || !scheduleLoaded) return null
@@ -85,6 +88,7 @@ export default function OptionsApp() {
         </div>
       </header>
 
+      <WhatsNewNotice />
       <PrivateWindowsNotice />
 
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
@@ -125,6 +129,11 @@ export default function OptionsApp() {
             onDelete={(id) =>
               update((s) => ({ ...s, customSites: s.customSites.filter((x) => x.id !== id) }))
             }
+            addDisabledReason={
+              state.customSites.length >= MAX_CUSTOM_SITES
+                ? `You've reached the limit of ${MAX_CUSTOM_SITES} custom sites.`
+                : undefined
+            }
             onAdd={(name, url, dailyLimit) =>
               update((s) => ({
                 ...s,
@@ -142,6 +151,8 @@ export default function OptionsApp() {
             hasPassword={lock.hasPassword}
             schedule={schedule}
             onScheduleChange={setSchedule}
+            customSites={state.customSites}
+            onCustomSitesChange={(customSites) => update((s) => ({ ...s, customSites }))}
           />
         ) : (
           <>

@@ -18,7 +18,7 @@ Block distracting websites like social media and short-form video, and stay focu
 Blockr helps you stay focused by blocking the websites that pull you away from your work.
 
 HOW IT WORKS
-• Add any site to your own block list, or use the built-in lists for social media (Instagram, TikTok, X, Facebook, Reddit) and short-form content (YouTube Shorts, TikTok, Instagram Reels).
+• Add any site to your own block list, or use the built-in lists for social media (Instagram, TikTok, X, Facebook, Reddit, Snapchat, Threads) and short-form content (YouTube Shorts, TikTok, Instagram Reels, Facebook Reels, Snapchat Spotlight).
 • Switch individual sites on or off whenever you like.
 • When you visit a blocked site, Blockr shows a calm "blocked" page instead, with a button to go back.
 • Need a break? Pause blocking for 15 minutes, 1 hour, or until tomorrow, straight from the popup.
@@ -26,6 +26,7 @@ HOW IT WORKS
 • Optional block schedule: only block on the days and hours you choose, such as work hours.
 • Optional password protection: ask for a password before blocking can be paused, turned off, or changed. Forgot it? A 6-hour cooling-off reset (cancellable) removes it.
 • Light and dark themes, or follow your device setting.
+• Back up your custom list to a file, and add sites from a file.
 • See how many times each site has been blocked.
 
 PRIVATE BY DESIGN

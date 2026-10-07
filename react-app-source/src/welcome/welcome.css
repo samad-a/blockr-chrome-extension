@@ -1,0 +1,114 @@
+@import '../shared/lock.css';
+
+html,
+body {
+  margin: 0;
+  background-color: var(--bg);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+.welcome {
+  box-sizing: border-box;
+  max-width: 600px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: clamp(20px, 6vw, 56px) 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img {
+  height: 44px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.welcome h2 {
+  margin: 24px 0 6px;
+  font-size: 32px;
+}
+
+.lead {
+  margin: 0 0 24px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.step {
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background-color: var(--surface);
+}
+
+.step h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.choice {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.choice small {
+  grid-column: 2;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pill {
+  display: inline-block;
+  padding: 6px 22px;
+  border: 2px solid var(--pill);
+  border-radius: 999px;
+  background-color: var(--pill);
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pill:hover {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.link-button {
+  font-size: 14px;
+}
+
+.done {
+  margin-top: 22px;
+}

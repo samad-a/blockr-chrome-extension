@@ -1,6 +1,6 @@
 # Blockr Privacy Policy
 
-_Last updated: 12 October 2026_
+_Last updated: 13 October 2026_
 
 Blockr is a Chrome extension that blocks websites you choose, to help you stay focused.
 **Blockr does not collect, transmit, or share any personal data.** It has no servers, no
@@ -19,6 +19,8 @@ Everything Blockr stores stays inside your browser, using Chrome's extension sto
 | How many times each site was blocked, and whether blocking is paused | `chrome.storage.local` | To show "times blocked" and to resume after a pause. Stays on this device. |
 | Time spent today on sites you gave a daily limit | `chrome.storage.local` | To enforce the limit. Only the number of seconds per limited site, kept for the current day and reset at midnight. Stays on this device. |
 | If you turn on password protection: a salted hash of your password, plus failed-attempt and reset timers | `chrome.storage.local` | To check the password and to enforce waiting periods. The password itself is never stored, and the hash never leaves this device. |
+| That the welcome page was already shown | `chrome.storage.sync` | So it only appears once, even after reinstalling or on another computer. |
+| A copy of your previous list, made before an upgrade changes how data is stored | `chrome.storage.local` | So an upgrade can be undone if something goes wrong. Stays on this device. |
 | Whether Blockr is currently unlocked | `chrome.storage.session` | Kept in memory only and cleared when the browser closes. |
 
 ## What Blockr does not do
@@ -36,6 +38,11 @@ Everything Blockr stores stays inside your browser, using Chrome's extension sto
 - **idle:** to tell whether you are at your computer, so a daily limit doesn't keep counting while you're away. No idle data is stored.
 - **alarms:** to end a timed pause automatically, apply your block schedule, and check daily-limit time every 30 seconds.
 - **favicon:** to show site icons from Chrome's local icon cache. No request is sent to any website for this.
+
+## Files you export
+
+"Export list" saves your custom list to a file on your computer. Blockr does not send it anywhere, and importing
+a file only reads it on your device.
 
 ## Links to other sites
 

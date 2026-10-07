@@ -13,7 +13,7 @@ export default defineConfig({
     rollupOptions: {
       // The blocked page is only reached through redirects, so the manifest
       // doesn't reference it as a page; add it as an entry so it gets bundled.
-      input: { blocked: 'blocked.html' },
+      input: { blocked: 'blocked.html', welcome: 'welcome.html' },
     },
   },
   server: {
