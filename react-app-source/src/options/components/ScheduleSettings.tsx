@@ -1,4 +1,11 @@
-import { DAY_NAMES, DAY_SHORT, describeSchedule, minutesToTime, timeToMinutes } from '../../shared/schedule'
+import {
+  DAY_NAMES,
+  DAY_SHORT,
+  describeSchedule,
+  minutesToTime,
+  scheduleOffText,
+  timeToMinutes,
+} from '../../shared/schedule'
 import type { Schedule } from '../../shared/schedule'
 import { Switch } from '../../shared/Switch'
 
@@ -12,6 +19,7 @@ const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0]
 
 export function ScheduleSettings({ schedule, onChange }: ScheduleSettingsProps) {
   const noDays = !schedule.days.some(Boolean)
+  const offText = scheduleOffText(schedule)
 
   const toggleDay = (day: number) =>
     onChange({ ...schedule, days: schedule.days.map((on, i) => (i === day ? !on : on)) })
@@ -80,6 +88,11 @@ export function ScheduleSettings({ schedule, onChange }: ScheduleSettingsProps) 
             {noDays
               ? 'Pick at least one day, or nothing will be blocked.'
               : `Blocking ${describeSchedule(schedule)}.`}
+          </p>
+          <p className="settings-note">
+            {offText
+              ? `Right now blocking is ${offText}. Daily limits don't count time while blocking is off.`
+              : 'Right now blocking is on.'}
           </p>
         </div>
       )}

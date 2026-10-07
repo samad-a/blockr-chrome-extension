@@ -1,6 +1,7 @@
 import type { Theme } from '../../shared/theme'
 import type { Schedule } from '../../shared/schedule'
 import { PasswordSettings } from './PasswordSettings'
+import { PrivateWindowsSettings } from './PrivateWindowsSettings'
 import { ScheduleSettings } from './ScheduleSettings'
 import { ThemePicker } from './ThemePicker'
 
@@ -25,6 +26,7 @@ export function SettingsPanel({ theme, onThemeChange, hasPassword, schedule, onS
       </section>
       <ScheduleSettings schedule={schedule} onChange={onScheduleChange} />
       <PasswordSettings hasPassword={hasPassword} />
+      <PrivateWindowsSettings />
     </div>
   )
 }

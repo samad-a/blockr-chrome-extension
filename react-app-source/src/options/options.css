@@ -708,3 +708,29 @@ body {
   align-items: center;
   gap: 8px;
 }
+
+/* ---------- notices ---------- */
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border: 2px solid var(--pill);
+  border-radius: 12px;
+  background-color: var(--surface);
+  font-size: 14px;
+}
+
+.notice p {
+  flex: 1 1 280px;
+  margin: 0;
+}
+
+.notice-actions {
+  display: flex;
+  gap: 8px;
+}

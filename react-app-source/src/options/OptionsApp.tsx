@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import blockrIcon from '../assets/blockr-icon.svg'
-import { isPresetEnabled } from '../shared/blocking'
+import { isPresetEnabled, limitedSites } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
 import { useLock } from '../shared/useLock'
+import { isPaused } from '../shared/local'
+import { scheduleOffText } from '../shared/schedule'
 import { secondsUsed } from '../shared/usage'
 import { useSchedule } from '../shared/useSchedule'
 import { useTheme } from '../shared/theme'
@@ -11,6 +13,7 @@ import { useBlockList } from '../shared/useBlockList'
 import { useLocalState } from '../shared/useLocalState'
 import type { Category } from '../shared/types'
 import { LockScreen } from './components/LockScreen'
+import { PrivateWindowsNotice } from './components/PrivateWindowsNotice'
 import { SettingsPanel } from './components/SettingsPanel'
 import { SiteTable } from './components/SiteTable'
 import type { SiteRowData } from './components/SiteRow'
@@ -37,7 +40,7 @@ const CATEGORY_LABEL: Record<Category, string> = {
 
 export default function OptionsApp() {
   const { state, update, error } = useBlockList()
-  const { blockCounts, usage } = useLocalState()
+  const { blockCounts, usage, pause } = useLocalState()
   const lock = useLock()
   const { theme, setTheme } = useTheme()
   const { schedule, setSchedule, loaded: scheduleLoaded } = useSchedule()
@@ -48,6 +51,17 @@ export default function OptionsApp() {
   if (lock.locked) {
     return <LockScreen resetAt={lock.resetAt} lockedUntil={lock.lockedUntil} now={lock.now} />
   }
+
+  // Daily limits only count while blocking is on, so say so when it isn't.
+  const limitsIdleReason =
+    limitedSites(state).length > 0
+      ? isPaused(pause)
+        ? 'blocking is paused'
+        : (() => {
+            const off = scheduleOffText(schedule)
+            return off ? `blocking is ${off} (block schedule)` : null
+          })()
+      : null
 
   const customRows: SiteRowData[] = state.customSites.map((s) => ({
     ...s,
@@ -71,12 +85,20 @@ export default function OptionsApp() {
         </div>
       </header>
 
+      <PrivateWindowsNotice />
+
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
 
       <section className="card" id="tab-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
         {error && (
           <p className="banner" role="alert">
             Couldn&rsquo;t save: {error}
+          </p>
+        )}
+
+        {tab === 'custom' && limitsIdleReason && (
+          <p className="banner" role="status">
+            Daily limits aren&rsquo;t counting right now: {limitsIdleReason}.
           </p>
         )}
 

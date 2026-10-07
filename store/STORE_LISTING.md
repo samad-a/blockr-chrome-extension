@@ -48,7 +48,7 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 - **storage:** Saves the user's block list, on/off settings, theme, block counters, pause state, and (if the user enables password protection) a salted password hash, so they persist. Only the block list and settings sync; counters, pause and the password hash stay on the device.
 - **declarativeNetRequest:** Redirects page loads of sites on the user's block list to Blockr's blocked page.
 - **webNavigation:** Detects in-page navigation on sites that change address without a full reload (for example opening a YouTube Short), so those pages can also be blocked.
-- **tabs:** Reads the address, active state and audio state of open tabs (on the device only) to count time toward the user's daily limits, and so a tab so a tab already on a newly blocked site can be moved to the blocked page, and updates the tab's address to do so.
+- **tabs:** Reads the address, active state and audio state of open tabs (on the device only) to count time toward the user's daily limits, and so a tab already on a newly blocked site can be moved to the blocked page (this updates the tab's address).
 - **idle:** Detects when the user is away from the computer (idle or screen locked), so daily-limit time stops counting when nobody is using the site. No idle data is stored.
 - **alarms:** Ends a timed pause (for example "15 minutes"), a pending password reset, and switches blocking on or off at the user's schedule times, automatically and on time.
 - **favicon:** Shows each site's icon in the block list from Chrome's local favicon cache. No network request is made.
@@ -58,7 +58,7 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 
 **Data usage:** Blockr does not collect or transmit user data. In the data-usage form, do not tick any data-collection categories, and tick all three certifications (no selling data, no use unrelated to the single purpose, no creditworthiness use).
 
-**Privacy policy URL:** `https://github.com/samad-a/blockr-chrome-extension/blob/main/PRIVACY.md` (the repository must be public for this link to work, otherwise host the policy somewhere public).
+**Privacy policy URL:** `https://github.com/samad-a/blockr-chrome-extension/blob/main/PRIVACY.md` (the repository is public).
 
 ## Assets (in this folder)
 
@@ -69,4 +69,4 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 | Small promo tile (440x280) | `promo-tile-440x280.png` |
 | Marquee promo tile (1400x560, optional) | `marquee-promo-tile-1400x560.png` |
 
-The extension package itself is `react-app-source/release/blockr-1.0.zip` (`npm run package`).
+The extension package itself is `react-app-source/release/blockr-1.1.zip` (`npm run package`).

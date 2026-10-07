@@ -1,5 +1,15 @@
 import { matchesUrl } from './blocking'
-import type { LimitedSite } from './usage'
+import { addUsage, dayKey } from './usage'
+import type { LimitedSite, Usage } from './usage'
+
+/** After this long without input, Chrome reports the user as idle (2.5 minutes). */
+export const IDLE_SECONDS = 150
+
+/** Most time one stretch can be credited, so a sleeping computer doesn't count as use. */
+export const MAX_STRETCH_SECONDS = 75
+
+/** What was in use since `since` (epoch ms), remembered between events. */
+export type TrackerState = { since: number; urls: string[] }
 
 /** The bits of a chrome.tabs.Tab the tracker needs. */
 export type TabInfo = {
@@ -33,4 +43,19 @@ export function trackedSiteUrls(
     }
   }
   return [...inUse]
+}
+
+/**
+ * Adds the time since the last event to the sites that were in use during it.
+ * A stretch is capped, so a missed event (sleep, crash) can't credit hours.
+ */
+export function bankElapsed(
+  usage: Usage,
+  state: TrackerState | null,
+  now: number,
+  today: string = dayKey(),
+): Usage {
+  if (!state) return usage
+  const seconds = Math.min(Math.max(0, (now - state.since) / 1000), MAX_STRETCH_SECONDS)
+  return addUsage(usage, state.urls, seconds, today)
 }

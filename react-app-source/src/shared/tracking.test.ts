@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { trackedSiteUrls } from './tracking'
+import { MAX_STRETCH_SECONDS, bankElapsed, trackedSiteUrls } from './tracking'
 import type { TabInfo } from './tracking'
+import { EMPTY_USAGE, secondsUsed } from './usage'
 
 const sites = [
   { name: 'YouTube', url: 'youtube.com', limitMinutes: 20 },
@@ -64,5 +65,38 @@ describe('trackedSiteUrls', () => {
   it('skips tabs without a URL and non-web pages', () => {
     const tabs = [{ active: true, windowId: 1 }, tab('chrome://extensions', { active: true })]
     expect(trackedSiteUrls(tabs, 1, true, sites)).toEqual([])
+  })
+})
+
+describe('bankElapsed', () => {
+  const TODAY = '2026-10-12'
+
+  it('credits the time since the last event to the sites that were in use', () => {
+    const usage = bankElapsed(EMPTY_USAGE, { since: 1_000, urls: ['x.com', 'youtube.com'] }, 21_000, TODAY)
+    expect(secondsUsed(usage, 'x.com', TODAY)).toBe(20)
+    expect(secondsUsed(usage, 'youtube.com', TODAY)).toBe(20)
+  })
+
+  it('does nothing without a previous state or when nothing was in use', () => {
+    expect(bankElapsed(EMPTY_USAGE, null, 5_000, TODAY)).toBe(EMPTY_USAGE)
+    expect(secondsUsed(bankElapsed(EMPTY_USAGE, { since: 0, urls: [] }, 5_000, TODAY), 'x.com', TODAY)).toBe(0)
+  })
+
+  it('caps one stretch so a long gap (sleep) is not counted as use', () => {
+    const usage = bankElapsed(EMPTY_USAGE, { since: 0, urls: ['x.com'] }, 3 * 3600_000, TODAY)
+    expect(secondsUsed(usage, 'x.com', TODAY)).toBe(MAX_STRETCH_SECONDS)
+  })
+
+  it('never goes negative if the clock moved back', () => {
+    const usage = bankElapsed(EMPTY_USAGE, { since: 10_000, urls: ['x.com'] }, 1_000, TODAY)
+    expect(secondsUsed(usage, 'x.com', TODAY)).toBe(0)
+  })
+
+  it('adds up across several stretches, tracking different sites each time', () => {
+    let usage = bankElapsed(EMPTY_USAGE, { since: 0, urls: ['x.com'] }, 10_000, TODAY)
+    usage = bankElapsed(usage, { since: 10_000, urls: ['youtube.com'] }, 25_000, TODAY)
+    usage = bankElapsed(usage, { since: 25_000, urls: ['x.com'] }, 30_000, TODAY)
+    expect(secondsUsed(usage, 'x.com', TODAY)).toBe(15)
+    expect(secondsUsed(usage, 'youtube.com', TODAY)).toBe(15)
   })
 })

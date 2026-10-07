@@ -1,19 +1,20 @@
-// Service worker: keeps the blocking rules in step with the block list.
+// Service worker: keeps the blocking rules in step with the block list,
+// and tracks time on sites that have a daily limit.
 import { activeSites, blockedPagePath, buildRules, findMatch, limitedSites } from './shared/blocking'
 import type { ActiveSite } from './shared/blocking'
 import { isPaused, loadLocal, setPause } from './shared/local'
 import { RESET_ALARM, completeResetIfDue, rearmResetAlarm } from './shared/lockActions'
 import { isBlockingNow, loadSchedule, nextChange } from './shared/schedule'
 import { loadState } from './shared/storage'
-import { trackedSiteUrls } from './shared/tracking'
-import { addUsage, dayKey, exhaustedUrls } from './shared/usage'
+import { IDLE_SECONDS, bankElapsed, trackedSiteUrls } from './shared/tracking'
+import type { TrackerState } from './shared/tracking'
+import { dayKey, exhaustedUrls } from './shared/usage'
 
 const PAUSE_ALARM = 'blockr-pause-end'
 const SCHEDULE_ALARM = 'blockr-schedule-change'
+/** Heartbeat while a limited site exists: banks time during long unbroken stretches. */
 const USAGE_ALARM = 'blockr-usage-tick'
-const LAST_TICK_KEY = 'lastUsageTick'
-/** Time credited per tick is capped so a sleeping computer doesn't count as use. */
-const MAX_TICK_SECONDS = 75
+const TRACKER_KEY = 'trackerState'
 
 async function currentSites(): Promise<ActiveSite[]> {
   const [state, local, schedule] = await Promise.all([loadState(), loadLocal(), loadSchedule()])
@@ -35,6 +36,13 @@ async function sweepOpenTabs(sites: ActiveSite[]) {
   )
 }
 
+/** Is there a daily limit to enforce, and is blocking on right now? Time only counts when both are true. */
+async function trackingNeeded() {
+  const [state, local, schedule] = await Promise.all([loadState(), loadLocal(), loadSchedule()])
+  const limited = limitedSites(state)
+  return { active: limited.length > 0 && !isPaused(local.pause) && isBlockingNow(schedule), limited, local }
+}
+
 async function applyRules() {
   const sites = await currentSites()
   const existing = await chrome.declarativeNetRequest.getDynamicRules()
@@ -51,13 +59,14 @@ async function applyRules() {
     await chrome.alarms.clear(PAUSE_ALARM)
   }
 
-  // Time limits are only tracked while blocking is active and a limited site exists.
+  // Run the usage heartbeat only while there is a limit to enforce.
   const { active: tracking } = await trackingNeeded()
   if (tracking) {
     if (!(await chrome.alarms.get(USAGE_ALARM))) await chrome.alarms.create(USAGE_ALARM, { periodInMinutes: 0.5 })
+    requestSample()
   } else {
     await chrome.alarms.clear(USAGE_ALARM)
-    await chrome.storage.session.remove(LAST_TICK_KEY)
+    await chrome.storage.session.remove(TRACKER_KEY)
   }
 
   // Re-apply the rules when the schedule next turns blocking on or off.
@@ -68,38 +77,42 @@ async function applyRules() {
   await sweepOpenTabs(sites)
 }
 
-async function trackingNeeded() {
-  const [state, local, schedule] = await Promise.all([loadState(), loadLocal(), loadSchedule()])
-  const limited = limitedSites(state)
-  return { active: limited.length > 0 && !isPaused(local.pause) && isBlockingNow(schedule), limited, local }
-}
-
 /**
- * Called every 30 seconds while a daily-limit site exists. Credits the elapsed
- * time to the limited sites in use (watched in the focused window, or playing
- * sound), and re-applies the rules when a limit runs out or a new day starts.
+ * Looks at what is in use right now, credits the time since the last look to
+ * what was in use then, and remembers the new state. Runs on focus, tab, audio
+ * and idle changes (so time is attributed exactly when things change) and on
+ * the heartbeat. Re-applies the rules when a limit runs out or a new day starts.
  */
-async function trackUsage() {
-  const { active: needed, limited, local } = await trackingNeeded()
-  const now = Date.now()
-  const last = ((await chrome.storage.session.get({ [LAST_TICK_KEY]: null }))[LAST_TICK_KEY] ?? null) as number | null
-  await chrome.storage.session.set({ [LAST_TICK_KEY]: now })
-  if (!needed) return
-
-  // New day: forget yesterday's time and lift yesterday's limit blocks.
-  const today = dayKey()
-  if (local.usage.date && local.usage.date !== today) {
-    await chrome.storage.local.set({ usage: { date: today, seconds: {} } })
-    refresh()
+async function sample() {
+  const { active, limited, local } = await trackingNeeded()
+  if (!active) {
+    await chrome.storage.session.remove(TRACKER_KEY)
     return
   }
-  if (last === null) return
 
-  const elapsed = Math.min((now - last) / 1000, MAX_TICK_SECONDS)
+  const now = Date.now()
+  const previous = ((await chrome.storage.session.get({ [TRACKER_KEY]: null }))[TRACKER_KEY] ?? null) as TrackerState | null
+
+  // New day: forget yesterday's time and lift yesterday's limit blocks.
+  let usage = local.usage
+  const today = dayKey()
+  if (usage.date && usage.date !== today) {
+    usage = { date: today, seconds: {} }
+    await chrome.storage.local.set({ usage })
+    refresh()
+  }
+
+  const before = exhaustedUrls(limited, usage)
+  const banked = bankElapsed(usage, previous, now)
+  if (banked !== usage) {
+    usage = banked
+    await chrome.storage.local.set({ usage })
+  }
+
   const [tabs, win, idle] = await Promise.all([
     chrome.tabs.query({}),
     chrome.windows.getLastFocused().catch(() => null),
-    chrome.idle.queryState(60),
+    chrome.idle.queryState(IDLE_SECONDS),
   ])
   const urls = trackedSiteUrls(
     tabs.map((tab) => ({ url: tab.url, active: tab.active, windowId: tab.windowId, audible: tab.audible })),
@@ -107,11 +120,8 @@ async function trackUsage() {
     idle === 'active',
     limited,
   )
-  if (urls.length === 0) return
+  await chrome.storage.session.set({ [TRACKER_KEY]: { since: now, urls } satisfies TrackerState })
 
-  const before = exhaustedUrls(limited, local.usage)
-  const usage = addUsage(local.usage, urls, elapsed)
-  await chrome.storage.local.set({ usage })
   if (before.join() !== exhaustedUrls(limited, usage).join()) refresh()
 }
 
@@ -119,6 +129,20 @@ async function trackUsage() {
 let queue: Promise<unknown> = Promise.resolve()
 const refresh = () => {
   queue = queue.then(applyRules).catch((e) => console.error('Blockr: failed to update rules', e))
+}
+
+// A burst of events (e.g. switching windows) only needs one look afterwards.
+let sampleQueued = false
+let sampleQueue: Promise<unknown> = Promise.resolve()
+function requestSample() {
+  if (sampleQueued) return
+  sampleQueued = true
+  sampleQueue = sampleQueue
+    .then(() => {
+      sampleQueued = false
+      return sample()
+    })
+    .catch((e) => console.error('Blockr: usage tracking failed', e))
 }
 
 chrome.runtime.onInstalled.addListener(refresh)
@@ -135,7 +159,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === PAUSE_ALARM) setPause(null)
   if (alarm.name === RESET_ALARM) completeResetIfDue()
   if (alarm.name === SCHEDULE_ALARM) refresh()
-  if (alarm.name === USAGE_ALARM) trackUsage().catch((e) => console.error('Blockr: usage tracking failed', e))
+  if (alarm.name === USAGE_ALARM) requestSample()
+})
+
+// What counts as "in use" changes when focus, the active tab, sound or idleness changes.
+// These events are rare (they follow the user's own actions) and each only does a small read.
+chrome.idle.setDetectionInterval(IDLE_SECONDS)
+chrome.idle.onStateChanged.addListener(requestSample)
+chrome.windows.onFocusChanged.addListener(requestSample)
+chrome.tabs.onActivated.addListener(requestSample)
+chrome.tabs.onRemoved.addListener(requestSample)
+chrome.tabs.onUpdated.addListener((_tabId, changeInfo) => {
+  if (changeInfo.audible !== undefined || changeInfo.url !== undefined) requestSample()
 })
 
 // Redirect rules only see full page loads. Sites like YouTube change page
