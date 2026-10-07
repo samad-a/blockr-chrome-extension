@@ -1,6 +1,6 @@
 # Blockr Privacy Policy
 
-_Last updated: 10 October 2026_
+_Last updated: 12 October 2026_
 
 Blockr is a Chrome extension that blocks websites you choose, to help you stay focused.
 **Blockr does not collect, transmit, or share any personal data.** It has no servers, no
@@ -17,6 +17,7 @@ Everything Blockr stores stays inside your browser, using Chrome's extension sto
 | Your colour theme choice (system, light or dark) | `chrome.storage.sync` | So the popup, options page and blocked page match. |
 | Your block schedule (days and hours), if you set one | `chrome.storage.sync` | So blocking only applies at the times you chose. |
 | How many times each site was blocked, and whether blocking is paused | `chrome.storage.local` | To show "times blocked" and to resume after a pause. Stays on this device. |
+| Time spent today on sites you gave a daily limit | `chrome.storage.local` | To enforce the limit. Only the number of seconds per limited site, kept for the current day and reset at midnight. Stays on this device. |
 | If you turn on password protection: a salted hash of your password, plus failed-attempt and reset timers | `chrome.storage.local` | To check the password and to enforce waiting periods. The password itself is never stored, and the hash never leaves this device. |
 | Whether Blockr is currently unlocked | `chrome.storage.session` | Kept in memory only and cleared when the browser closes. |
 
@@ -29,9 +30,11 @@ Everything Blockr stores stays inside your browser, using Chrome's extension sto
 ## Why Blockr needs its permissions
 
 - **Access to all websites:** so a block rule can apply to whichever site you choose to block. Blockr only acts on sites in your list.
+- **tabs:** also lets Blockr see, on your device, which tab is active and whether a tab is playing sound, to count time toward daily limits. This is never stored or sent anywhere.
 - **declarativeNetRequest, webNavigation, tabs:** to redirect blocked sites to Blockr's "blocked" page, including when a site changes page without a full reload (for example YouTube Shorts), and to move already-open tabs on a newly blocked site to that page.
 - **storage:** to save your settings (see above).
-- **alarms:** to end a timed pause automatically.
+- **idle:** to tell whether you are at your computer, so a daily limit doesn't keep counting while you're away. No idle data is stored.
+- **alarms:** to end a timed pause automatically, apply your block schedule, and check daily-limit time every 30 seconds.
 - **favicon:** to show site icons from Chrome's local icon cache. No request is sent to any website for this.
 
 ## Links to other sites

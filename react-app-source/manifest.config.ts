@@ -34,6 +34,8 @@ export default defineManifest({
     'webNavigation',
     'tabs',
     'alarms',
+    // Daily limits: tell whether the user is at the computer (no install warning).
+    'idle',
   ],
   // Needed so redirect rules can apply to every site the user may block.
   host_permissions: ['<all_urls>'],

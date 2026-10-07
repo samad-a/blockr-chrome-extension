@@ -4,7 +4,7 @@ import { PauseControl } from './PauseControl'
 import { ForgotPassword } from './shared/ForgotPassword'
 import { Switch } from './shared/Switch'
 import { UnlockForm } from './shared/UnlockForm'
-import { countBlocked } from './shared/blocking'
+import { countBlocked, limitedSites } from './shared/blocking'
 import { isPaused } from './shared/local'
 import { lockNow } from './shared/lockActions'
 import { useTheme } from './shared/theme'
@@ -13,6 +13,7 @@ import { useLocalState } from './shared/useLocalState'
 import { useLock } from './shared/useLock'
 import { useSchedule } from './shared/useSchedule'
 import { scheduleOffText } from './shared/schedule'
+import { exhaustedUrls } from './shared/usage'
 import './App.css'
 
 type ToggleProps = {
@@ -41,7 +42,7 @@ function LockIcon({ open }: { open: boolean }) {
 
 function App() {
   const { state, update } = useBlockList()
-  const { pause } = useLocalState()
+  const { pause, usage } = useLocalState()
   const lock = useLock()
   const { schedule, loaded: scheduleLoaded } = useSchedule()
   useTheme()
@@ -57,7 +58,8 @@ function App() {
     else action()
   }
 
-  const blockedCount = countBlocked(state)
+  const blockedCount = countBlocked(state, usage)
+  const limitsReached = exhaustedUrls(limitedSites(state), usage).length
   const paused = isPaused(pause)
   const offSchedule = scheduleOffText(schedule)
   const status = paused
@@ -110,6 +112,11 @@ function App() {
             <span className="dot" aria-hidden />
             {status}
           </p>
+          {limitsReached > 0 && !paused && !offSchedule && (
+            <p className="status-note">
+              {limitsReached} daily {limitsReached === 1 ? 'limit' : 'limits'} reached
+            </p>
+          )}
           <PauseControl pause={pause} requireUnlock={requireUnlock} />
           <div className="panel">
             <Toggle

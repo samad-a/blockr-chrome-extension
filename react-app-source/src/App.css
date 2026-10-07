@@ -207,3 +207,9 @@ button:focus-visible {
     font-weight: 700;
 }
 
+
+.status-note {
+    margin-top: -8px;
+    color: var(--muted);
+    font-size: 12px;
+}

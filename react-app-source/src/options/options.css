@@ -210,8 +210,73 @@ body {
   margin-left: 6px;
 }
 
-.cell-error {
+.cell-date {
+  display: none; /* shown on narrow screens, and in the edit row */
+}
+
+.editor-error {
+  margin: 4px 0 0;
+  min-height: 1.2em;
   font-size: 13px;
+  font-weight: 700;
+}
+
+.limit-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.limit-field .text-input {
+  width: 64px;
+  text-align: center;
+}
+
+.cell-added {
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.limit-cell {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.limit-none {
+  color: var(--muted);
+}
+
+.limit-bar {
+  display: inline-block;
+  width: 64px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: var(--tab-off);
+}
+
+.limit-bar i {
+  display: block;
+  height: 100%;
+  background-color: var(--brand);
+}
+
+.limit-bar i.reached {
+  background-color: var(--pill);
+}
+
+.limit-tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background-color: var(--pill);
+  color: #fff;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -468,7 +533,8 @@ body {
       'icon name toggle'
       'icon url toggle'
       'icon date actions'
-      'icon times actions';
+      'icon times actions'
+      'icon limit actions';
     column-gap: 10px;
     row-gap: 2px;
     margin-bottom: 8px;
@@ -501,8 +567,13 @@ body {
     overflow-wrap: break-word;
   }
 
-  .cell-date {
+  .site-table .cell-date {
+    display: block;
     grid-area: date;
+  }
+
+  .cell-limit {
+    grid-area: limit;
   }
 
   .cell-times {
@@ -510,7 +581,8 @@ body {
   }
 
   .cell-date::before,
-  .cell-times::before {
+  .cell-times::before,
+  .cell-limit::before {
     content: attr(data-label) ': ';
     color: var(--muted);
   }
@@ -529,7 +601,8 @@ body {
     grid-template-columns: 28px 1fr;
     grid-template-areas:
       'icon form'
-      'icon error'
+      'icon limit-edit'
+      'icon added'
       'icon actions';
   }
 
@@ -537,8 +610,12 @@ body {
     grid-area: form;
   }
 
-  .site-table .cell-error {
-    grid-area: error;
+  .site-table .cell-limit-edit {
+    grid-area: limit-edit;
+  }
+
+  .site-table .cell-added {
+    grid-area: added;
   }
 
   .site-row.editing .cell-actions {

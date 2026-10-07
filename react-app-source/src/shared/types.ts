@@ -9,6 +9,8 @@ export type CustomSite = {
   /** Epoch milliseconds. */
   dateAdded: number
   enabled: boolean
+  /** Minutes allowed per day before the site is blocked until midnight. Missing = blocked outright. */
+  dailyLimit?: number
 }
 
 /** A built-in site. Defined in code (presets.ts); only its on/off flag is stored. */

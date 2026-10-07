@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import blockrIcon from '../assets/blockr-icon.svg'
 import { activeSites } from '../shared/blocking'
-import { incrementBlockCount } from '../shared/local'
+import { incrementBlockCount, loadLocal } from '../shared/local'
 import { loadState } from '../shared/storage'
 import { useTheme } from '../shared/theme'
 import './blocked.css'
@@ -9,6 +9,8 @@ import './blocked.css'
 const params = new URLSearchParams(window.location.search)
 const site = params.get('site') ?? 'This site'
 const url = params.get('url')
+// Set when the site is blocked because its daily limit ran out.
+const limit = Number(params.get('limit')) || null
 
 // StrictMode runs effects twice in dev; make sure one visit counts once.
 let counted = false
@@ -30,8 +32,8 @@ export default function BlockedApp() {
     if (counted || !url) return
     counted = true
     // Any web page can open this page with any ?url=..., so only count sites really on the list.
-    loadState().then((state) => {
-      if (activeSites(state).some((site) => site.url === url)) incrementBlockCount(url)
+    Promise.all([loadState(), loadLocal()]).then(([state, local]) => {
+      if (activeSites(state, local.usage).some((site) => site.url === url)) incrementBlockCount(url)
     })
   }, [])
 
@@ -41,8 +43,19 @@ export default function BlockedApp() {
         <img src={blockrIcon} alt="" />
         <h1>Blockr</h1>
       </div>
-      <h2>{site} is blocked</h2>
-      <p>This site is on your block list. Stay focused &mdash; you&rsquo;ve got this.</p>
+      {limit ? (
+        <>
+          <h2>
+            You&rsquo;ve used your {limit} {limit === 1 ? 'minute' : 'minutes'} on {site} today
+          </h2>
+          <p>{site} is blocked until midnight, when your limit resets. Stay focused &mdash; you&rsquo;ve got this.</p>
+        </>
+      ) : (
+        <>
+          <h2>{site} is blocked</h2>
+          <p>This site is on your block list. Stay focused &mdash; you&rsquo;ve got this.</p>
+        </>
+      )}
       <button type="button" onClick={goBack}>
         go back
       </button>

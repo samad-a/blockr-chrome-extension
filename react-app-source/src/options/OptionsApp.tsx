@@ -4,6 +4,7 @@ import { isPresetEnabled } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
 import { useLock } from '../shared/useLock'
+import { secondsUsed } from '../shared/usage'
 import { useSchedule } from '../shared/useSchedule'
 import { useTheme } from '../shared/theme'
 import { useBlockList } from '../shared/useBlockList'
@@ -36,7 +37,7 @@ const CATEGORY_LABEL: Record<Category, string> = {
 
 export default function OptionsApp() {
   const { state, update, error } = useBlockList()
-  const { blockCounts } = useLocalState()
+  const { blockCounts, usage } = useLocalState()
   const lock = useLock()
   const { theme, setTheme } = useTheme()
   const { schedule, setSchedule, loaded: scheduleLoaded } = useSchedule()
@@ -51,6 +52,7 @@ export default function OptionsApp() {
   const customRows: SiteRowData[] = state.customSites.map((s) => ({
     ...s,
     timesBlocked: blockCounts[s.url] ?? 0,
+    usedSeconds: secondsUsed(usage, s.url),
     editable: true,
   }))
 
@@ -87,21 +89,21 @@ export default function OptionsApp() {
                 customSites: s.customSites.map((x) => (x.id === id ? { ...x, enabled } : x)),
               }))
             }
-            onEdit={(id, name, url) =>
+            onEdit={(id, name, url, dailyLimit) =>
               update((s) => ({
                 ...s,
-                customSites: s.customSites.map((x) => (x.id === id ? { ...x, name, url } : x)),
+                customSites: s.customSites.map((x) => (x.id === id ? { ...x, name, url, dailyLimit } : x)),
               }))
             }
             onDelete={(id) =>
               update((s) => ({ ...s, customSites: s.customSites.filter((x) => x.id !== id) }))
             }
-            onAdd={(name, url) =>
+            onAdd={(name, url, dailyLimit) =>
               update((s) => ({
                 ...s,
                 customSites: [
                   ...s.customSites,
-                  { id: crypto.randomUUID(), name, url, dateAdded: Date.now(), enabled: true },
+                  { id: crypto.randomUUID(), name, url, dateAdded: Date.now(), enabled: true, dailyLimit },
                 ],
               }))
             }

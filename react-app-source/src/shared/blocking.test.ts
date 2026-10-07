@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { activeSites, blockedPagePath, buildRules, findMatch, matchesUrl } from './blocking'
+import { activeSites, blockedPagePath, buildRules, countBlocked, findMatch, limitedSites, matchesUrl } from './blocking'
 import { DEFAULT_STATE } from './storage'
 import type { BlockListState } from './types'
+import { addUsage, EMPTY_USAGE } from './usage'
 
 describe('matchesUrl', () => {
   it('matches the host and its subdomains', () => {
@@ -70,5 +71,57 @@ describe('buildRules', () => {
 
   it('encodes names in the blocked page path', () => {
     expect(blockedPagePath({ name: 'A & B', url: 'a.com' })).toBe('/blocked.html?site=A%20%26%20B&url=a.com')
+  })
+})
+
+describe('daily limits', () => {
+  const TODAY = '2026-10-12'
+  const limited = (url: string, dailyLimit: number, enabled = true) => ({ ...site(url, enabled), dailyLimit })
+  const state: BlockListState = {
+    ...DEFAULT_STATE,
+    customSites: [limited('youtube.com', 20), site('x.com', true)],
+  }
+
+  it('does not block a limited site until its time is used up', () => {
+    const urls = activeSites(state, EMPTY_USAGE, TODAY).map((s) => s.url)
+    expect(urls).toEqual(['x.com'])
+    expect(countBlocked(state, EMPTY_USAGE, TODAY)).toBe(1)
+  })
+
+  it('blocks it once the limit is reached, and tells the blocked page about the limit', () => {
+    const usage = addUsage(EMPTY_USAGE, ['youtube.com'], 20 * 60, TODAY)
+    const sites = activeSites(state, usage, TODAY)
+    expect(sites.map((s) => s.url)).toEqual(['youtube.com', 'x.com'])
+    expect(sites[0].limitMinutes).toBe(20)
+    expect(blockedPagePath(sites[0])).toContain('&limit=20')
+    expect(blockedPagePath(sites[1])).not.toContain('limit')
+  })
+
+  it('unblocks again the next day', () => {
+    const usage = addUsage(EMPTY_USAGE, ['youtube.com'], 99999, '2026-10-11')
+    expect(activeSites(state, usage, TODAY).map((s) => s.url)).toEqual(['x.com'])
+  })
+
+  it('ignores limits on disabled sites', () => {
+    const off: BlockListState = { ...DEFAULT_STATE, customSites: [limited('youtube.com', 20, false)] }
+    expect(limitedSites(off)).toEqual([])
+    expect(activeSites(off, EMPTY_USAGE, TODAY)).toEqual([])
+  })
+
+  it('lists enabled limited sites', () => {
+    expect(limitedSites(state)).toEqual([{ name: 'youtube.com', url: 'youtube.com', limitMinutes: 20 }])
+  })
+
+  it('lets a custom limit override a preset on the same site', () => {
+    const withPreset: BlockListState = {
+      customSites: [limited('tiktok.com', 15)],
+      presetEnabled: {},
+      categories: { social: true, shortForm: false },
+    }
+    const urls = activeSites(withPreset, EMPTY_USAGE, TODAY).map((s) => s.url)
+    expect(urls).not.toContain('tiktok.com')
+    expect(urls).toContain('reddit.com')
+    const used = addUsage(EMPTY_USAGE, ['tiktok.com'], 15 * 60, TODAY)
+    expect(activeSites(withPreset, used, TODAY).map((s) => s.url)).toContain('tiktok.com')
   })
 })

@@ -1,4 +1,6 @@
 import type { PasswordRecord } from './password'
+import { EMPTY_USAGE } from './usage'
+import type { Usage } from './usage'
 
 // Device-local state (chrome.storage.local). Kept out of sync storage because
 // counters change often and sync is limited to 120 writes per minute.
@@ -10,6 +12,8 @@ export type LocalState = {
   /** Normalised block URL -> number of times the blocked page was shown. */
   blockCounts: Record<string, number>
   pause: Pause
+  /** Time spent today on sites with a daily limit. */
+  usage: Usage
   /** Salted hash of the lock password, or null when no password is set. */
   password: PasswordRecord | null
   /** When a pending "forgot password" reset completes (epoch ms), or null. */
@@ -22,6 +26,7 @@ export type LocalState = {
 export const DEFAULT_LOCAL: LocalState = {
   blockCounts: {},
   pause: null,
+  usage: EMPTY_USAGE,
   password: null,
   resetAt: null,
   failures: 0,

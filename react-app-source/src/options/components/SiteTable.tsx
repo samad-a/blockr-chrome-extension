@@ -7,15 +7,17 @@ type SiteTableProps = {
   rows: SiteRowData[]
   emptyMessage?: string
   onToggle: (id: string, enabled: boolean) => void
-  onEdit?: (id: string, name: string, url: string) => void
+  onEdit?: (id: string, name: string, url: string, dailyLimit: number | undefined) => void
   onDelete?: (id: string) => void
   /** Providing this shows the "+ Add new item" row. */
-  onAdd?: (name: string, url: string) => void
+  onAdd?: (name: string, url: string, dailyLimit: number | undefined) => void
 }
 
 export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAdd }: SiteTableProps) {
   const [adding, setAdding] = useState(false)
   const allUrls = rows.map((r) => r.url)
+  // Only the custom list (the one you can add to) supports daily limits.
+  const showLimit = onAdd !== undefined
 
   return (
     <table className="site-table">
@@ -24,8 +26,8 @@ export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAd
           <th className="cell-icon" />
           <th>name</th>
           <th>URL</th>
-          <th className="cell-center">date added</th>
           <th className="cell-center">times blocked</th>
+          {showLimit && <th>daily limit</th>}
           <th className="cell-center">block</th>
           <th />
         </tr>
@@ -42,9 +44,10 @@ export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAd
           <SiteRow
             key={site.id}
             site={site}
+            showLimit={showLimit}
             otherUrls={allUrls.filter((u) => u !== site.url)}
             onToggle={(enabled) => onToggle(site.id, enabled)}
-            onEdit={(name, url) => onEdit?.(site.id, name, url)}
+            onEdit={(name, url, dailyLimit) => onEdit?.(site.id, name, url, dailyLimit)}
             onDelete={() => onDelete?.(site.id)}
           />
         ))}
@@ -53,8 +56,8 @@ export function SiteTable({ rows, emptyMessage, onToggle, onEdit, onDelete, onAd
             <SiteEditor
               submitLabel="add"
               existingUrls={allUrls}
-              onSubmit={(name, url) => {
-                onAdd(name, url)
+              onSubmit={(name, url, dailyLimit) => {
+                onAdd(name, url, dailyLimit)
                 setAdding(false)
               }}
               onCancel={() => setAdding(false)}
