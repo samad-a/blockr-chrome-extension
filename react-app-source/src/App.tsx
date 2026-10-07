@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import blockrIcon from './assets/blockr-icon.svg'
 import { PauseControl } from './PauseControl'
+import { ForgotPassword } from './shared/ForgotPassword'
 import { Switch } from './shared/Switch'
 import { UnlockForm } from './shared/UnlockForm'
 import { countBlocked } from './shared/blocking'
@@ -10,6 +11,8 @@ import { useTheme } from './shared/theme'
 import { useBlockList } from './shared/useBlockList'
 import { useLocalState } from './shared/useLocalState'
 import { useLock } from './shared/useLock'
+import { useSchedule } from './shared/useSchedule'
+import { scheduleOffText } from './shared/schedule'
 import './App.css'
 
 type ToggleProps = {
@@ -40,12 +43,13 @@ function App() {
   const { state, update } = useBlockList()
   const { pause } = useLocalState()
   const lock = useLock()
+  const { schedule, loaded: scheduleLoaded } = useSchedule()
   useTheme()
   // An action waiting for the password, e.g. "pause for 1 hour".
   const [pending, setPending] = useState<{ run: () => void } | null>(null)
 
   // Wait for storage so the popup doesn't flash "0 sites" (or skip the lock).
-  if (!state || !lock.ready) return null
+  if (!state || !lock.ready || !scheduleLoaded) return null
 
   /** Runs `action` now, or after the password is entered if a lock is set. */
   const requireUnlock = (action: () => void) => {
@@ -55,11 +59,12 @@ function App() {
 
   const blockedCount = countBlocked(state)
   const paused = isPaused(pause)
-  const status = !paused
-    ? `blocking ${blockedCount} ${blockedCount === 1 ? 'site' : 'sites'}`
-    : pause?.until
+  const offSchedule = scheduleOffText(schedule)
+  const status = paused
+    ? pause?.until
       ? `paused until ${new Date(pause.until).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`
       : 'paused'
+    : (offSchedule ?? `blocking ${blockedCount} ${blockedCount === 1 ? 'site' : 'sites'}`)
   // Turning a category on strengthens blocking and is always allowed; turning it off needs the password.
   const setCategory = (category: 'social' | 'shortForm') => (on: boolean) => {
     const change = () => update((s) => ({ ...s, categories: { ...s.categories, [category]: on } }))
@@ -94,18 +99,14 @@ function App() {
               setPending(null)
             }}
           />
-          <div className="prompt-links">
-            <button className="link-button" onClick={() => setPending(null)}>
-              cancel
-            </button>
-            <button className="link-button" onClick={() => chrome.runtime.openOptionsPage()}>
-              forgot password?
-            </button>
-          </div>
+          <ForgotPassword resetAt={lock.resetAt} now={lock.now} />
+          <button className="link-button" onClick={() => setPending(null)}>
+            cancel
+          </button>
         </div>
       ) : (
         <div className="container">
-          <p className={paused || blockedCount === 0 ? 'status idle' : 'status'}>
+          <p className={paused || offSchedule || blockedCount === 0 ? 'status idle' : 'status'}>
             <span className="dot" aria-hidden />
             {status}
           </p>

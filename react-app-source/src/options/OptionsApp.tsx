@@ -4,6 +4,7 @@ import { isPresetEnabled } from '../shared/blocking'
 import { PRESETS_BY_CATEGORY } from '../shared/presets'
 import { Switch } from '../shared/Switch'
 import { useLock } from '../shared/useLock'
+import { useSchedule } from '../shared/useSchedule'
 import { useTheme } from '../shared/theme'
 import { useBlockList } from '../shared/useBlockList'
 import { useLocalState } from '../shared/useLocalState'
@@ -38,10 +39,11 @@ export default function OptionsApp() {
   const { blockCounts } = useLocalState()
   const lock = useLock()
   const { theme, setTheme } = useTheme()
+  const { schedule, setSchedule, loaded: scheduleLoaded } = useSchedule()
   const [tab, setTab] = useState<TabId>('custom')
 
   // Wait for storage (including the lock) so a locked page never flashes its contents.
-  if (!state || !lock.ready) return null
+  if (!state || !lock.ready || !scheduleLoaded) return null
   if (lock.locked) {
     return <LockScreen resetAt={lock.resetAt} lockedUntil={lock.lockedUntil} now={lock.now} />
   }
@@ -105,7 +107,13 @@ export default function OptionsApp() {
             }
           />
         ) : tab === 'settings' ? (
-          <SettingsPanel theme={theme} onThemeChange={setTheme} hasPassword={lock.hasPassword} />
+          <SettingsPanel
+            theme={theme}
+            onThemeChange={setTheme}
+            hasPassword={lock.hasPassword}
+            schedule={schedule}
+            onScheduleChange={setSchedule}
+          />
         ) : (
           <>
             <div className="master">

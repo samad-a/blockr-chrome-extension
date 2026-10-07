@@ -49,11 +49,15 @@ export function SiteRow({ site, otherUrls, onToggle, onEdit, onDelete }: SiteRow
       <td className="cell-icon">
         <Favicon url={site.url} />
       </td>
-      <td>{site.name}</td>
-      <td>{site.url}</td>
-      <td className="cell-center">{site.dateAdded ? formatDate(site.dateAdded) : '—'}</td>
-      <td className="cell-center">{site.timesBlocked}</td>
-      <td className="cell-center">
+      <td className="cell-name">{site.name}</td>
+      <td className="cell-url">{site.url}</td>
+      <td className="cell-center cell-date" data-label="Added">
+        {site.dateAdded ? formatDate(site.dateAdded) : '—'}
+      </td>
+      <td className="cell-center cell-times" data-label="Blocked">
+        {site.timesBlocked}
+      </td>
+      <td className="cell-center cell-toggle">
         <Switch small label={`Block ${site.name}`} checked={site.enabled} onChange={onToggle} />
       </td>
       <td className="cell-actions">

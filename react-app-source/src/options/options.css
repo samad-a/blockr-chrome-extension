@@ -10,9 +10,13 @@ body {
 }
 
 .options {
-  max-width: 1040px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-width: 1280px;
+  min-height: 100vh;
   margin: 0 auto;
-  padding: 24px 24px 48px;
+  padding: clamp(14px, 3vw, 40px);
 }
 
 /* ---------- header ---------- */
@@ -131,6 +135,7 @@ body {
 .card {
   background-color: var(--surface);
   border-radius: 0 12px 12px 12px;
+  flex: 1;
   padding: 16px;
   min-height: 320px;
   overflow-x: auto;
@@ -158,7 +163,7 @@ body {
 
 .site-table {
   width: 100%;
-  min-width: 760px;
+  min-width: 700px;
   border-collapse: separate;
   border-spacing: 0 6px;
   font-size: 14px;
@@ -181,6 +186,11 @@ body {
 
 .site-table td:last-child {
   border-radius: 0 8px 8px 0;
+}
+
+/* A row with a single cell (e.g. "Add new item") is rounded on both sides. */
+.site-table td:only-child {
+  border-radius: 8px;
 }
 
 .cell-center {
@@ -423,4 +433,201 @@ body {
 .lock-reset p {
   margin-bottom: 6px;
   font-size: 13px;
+}
+
+/* ---------- narrower windows ---------- */
+
+@media (max-width: 900px) {
+  .card {
+    padding: 10px;
+    border-radius: 0 12px 12px 12px;
+  }
+
+  .site-table {
+    display: block;
+    min-width: 0;
+  }
+
+  .site-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .site-table tbody {
+    display: block;
+  }
+
+  /* Each row becomes a small card: icon, name + URL, then date/count, toggle and buttons. */
+  .site-row {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    grid-template-areas:
+      'icon name toggle'
+      'icon url toggle'
+      'icon date actions'
+      'icon times actions';
+    column-gap: 10px;
+    row-gap: 2px;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--row);
+  }
+
+  .site-table td {
+    display: block;
+    padding: 0;
+    background: none;
+    border-radius: 0 !important;
+    text-align: left !important;
+  }
+
+  .site-table .cell-icon {
+    grid-area: icon;
+    width: auto;
+  }
+
+  .cell-name {
+    grid-area: name;
+    font-weight: 700;
+  }
+
+  .cell-url {
+    grid-area: url;
+    min-width: 0;
+    overflow-wrap: break-word;
+  }
+
+  .cell-date {
+    grid-area: date;
+  }
+
+  .cell-times {
+    grid-area: times;
+  }
+
+  .cell-date::before,
+  .cell-times::before {
+    content: attr(data-label) ': ';
+    color: var(--muted);
+  }
+
+  .cell-toggle {
+    grid-area: toggle;
+    align-self: center;
+  }
+
+  .site-table .cell-actions {
+    grid-area: actions;
+    align-self: end;
+  }
+
+  .site-row.editing {
+    grid-template-columns: 28px 1fr;
+    grid-template-areas:
+      'icon form'
+      'icon error'
+      'icon actions';
+  }
+
+  .cell-form {
+    grid-area: form;
+  }
+
+  .site-table .cell-error {
+    grid-area: error;
+  }
+
+  .site-row.editing .cell-actions {
+    justify-self: end;
+  }
+
+  .editor-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .add-row {
+    display: block;
+    padding: 0;
+  }
+
+  .password-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .options-header {
+    gap: 8px;
+  }
+
+  .donate {
+    font-size: 13px;
+  }
+
+  .tab {
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+}
+
+/* ---------- schedule ---------- */
+
+.schedule-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.schedule-body {
+  margin-top: 14px;
+}
+
+.day-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.day {
+  min-width: 48px;
+  padding: 6px 10px;
+  border: 2px solid var(--pill);
+  border-radius: 999px;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.day.selected {
+  background-color: var(--pill);
+  color: #fff;
+}
+
+.day:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.time-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.time-range label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

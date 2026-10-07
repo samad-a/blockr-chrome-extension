@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { UNLOCK_MS } from '../../shared/lock'
 import { lockNow, removePassword, setPassword } from '../../shared/lockActions'
 import { validateNewPassword } from '../../shared/password'
 
@@ -22,7 +23,12 @@ export function PasswordSettings({ hasPassword }: { hasPassword: boolean }) {
     setBusy(false)
     setPasswordText('')
     setConfirm('')
-    setMessage({ text: hasPassword ? 'Password changed.' : 'Password set. Blockr is now protected.', error: false })
+    setMessage({
+      text: hasPassword
+        ? 'Password changed.'
+        : `Password set. This page stays open for now and locks after ${UNLOCK_MS / 60_000} minutes of inactivity, or press “lock now”.`,
+      error: false,
+    })
   }
 
   return (

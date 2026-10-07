@@ -1,14 +1,18 @@
 import type { Theme } from '../../shared/theme'
+import type { Schedule } from '../../shared/schedule'
 import { PasswordSettings } from './PasswordSettings'
+import { ScheduleSettings } from './ScheduleSettings'
 import { ThemePicker } from './ThemePicker'
 
 type SettingsPanelProps = {
   theme: Theme
   onThemeChange: (theme: Theme) => void
   hasPassword: boolean
+  schedule: Schedule
+  onScheduleChange: (schedule: Schedule) => void
 }
 
-export function SettingsPanel({ theme, onThemeChange, hasPassword }: SettingsPanelProps) {
+export function SettingsPanel({ theme, onThemeChange, hasPassword, schedule, onScheduleChange }: SettingsPanelProps) {
   return (
     <div className="settings">
       <section className="settings-section">
@@ -19,6 +23,7 @@ export function SettingsPanel({ theme, onThemeChange, hasPassword }: SettingsPan
         </p>
         <ThemePicker theme={theme} onChange={onThemeChange} />
       </section>
+      <ScheduleSettings schedule={schedule} onChange={onScheduleChange} />
       <PasswordSettings hasPassword={hasPassword} />
     </div>
   )

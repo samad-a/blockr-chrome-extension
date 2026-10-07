@@ -207,8 +207,3 @@ button:focus-visible {
     font-weight: 700;
 }
 
-.prompt-links {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}

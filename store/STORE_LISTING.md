@@ -22,6 +22,7 @@ HOW IT WORKS
 • Switch individual sites on or off whenever you like.
 • When you visit a blocked site, Blockr shows a calm "blocked" page instead, with a button to go back.
 • Need a break? Pause blocking for 15 minutes, 1 hour, or until tomorrow, straight from the popup.
+• Optional block schedule: only block on the days and hours you choose, such as work hours.
 • Optional password protection: ask for a password before blocking can be paused, turned off, or changed. Forgot it? A 6-hour cooling-off reset (cancellable) removes it.
 • Light and dark themes, or follow your device setting.
 • See how many times each site has been blocked.
@@ -47,7 +48,7 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 - **declarativeNetRequest:** Redirects page loads of sites on the user's block list to Blockr's blocked page.
 - **webNavigation:** Detects in-page navigation on sites that change address without a full reload (for example opening a YouTube Short), so those pages can also be blocked.
 - **tabs:** Reads the address of open tabs so a tab already on a newly blocked site can be moved to the blocked page, and updates the tab's address to do so.
-- **alarms:** Ends a timed pause (for example "15 minutes") and a pending password reset automatically on time.
+- **alarms:** Ends a timed pause (for example "15 minutes"), a pending password reset, and switches blocking on or off at the user's schedule times, automatically and on time.
 - **favicon:** Shows each site's icon in the block list from Chrome's local favicon cache. No network request is made.
 - **Host permissions (all sites):** The user can block any website they enter, so redirect rules and in-page navigation checks must be able to apply to any site. Blockr only acts on sites in the user's own block list and does not read page content.
 

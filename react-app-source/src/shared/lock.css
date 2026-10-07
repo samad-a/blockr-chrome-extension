@@ -87,3 +87,14 @@
   background-color: var(--pill);
   color: #fff;
 }
+
+.forgot {
+  font-size: 13px;
+  text-align: center;
+}
+
+.forgot p {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.4;
+}

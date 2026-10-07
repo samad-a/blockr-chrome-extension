@@ -3,13 +3,16 @@ import { activeSites, blockedPagePath, buildRules, findMatch } from './shared/bl
 import type { ActiveSite } from './shared/blocking'
 import { isPaused, loadLocal, setPause } from './shared/local'
 import { RESET_ALARM, completeResetIfDue, rearmResetAlarm } from './shared/lockActions'
+import { isBlockingNow, loadSchedule, nextChange } from './shared/schedule'
 import { loadState } from './shared/storage'
 
 const PAUSE_ALARM = 'blockr-pause-end'
+const SCHEDULE_ALARM = 'blockr-schedule-change'
 
 async function currentSites(): Promise<ActiveSite[]> {
-  const [state, local] = await Promise.all([loadState(), loadLocal()])
-  return isPaused(local.pause) ? [] : activeSites(state)
+  const [state, local, schedule] = await Promise.all([loadState(), loadLocal(), loadSchedule()])
+  // Nothing is blocked while paused, or outside the block schedule's hours.
+  return isPaused(local.pause) || !isBlockingNow(schedule) ? [] : activeSites(state)
 }
 
 const blockedTabUrl = (site: ActiveSite) => chrome.runtime.getURL(blockedPagePath(site))
@@ -42,6 +45,11 @@ async function applyRules() {
     await chrome.alarms.clear(PAUSE_ALARM)
   }
 
+  // Re-apply the rules when the schedule next turns blocking on or off.
+  const change = nextChange(await loadSchedule())
+  if (change) await chrome.alarms.create(SCHEDULE_ALARM, { when: change.getTime() })
+  else await chrome.alarms.clear(SCHEDULE_ALARM)
+
   await sweepOpenTabs(sites)
 }
 
@@ -64,6 +72,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === PAUSE_ALARM) setPause(null)
   if (alarm.name === RESET_ALARM) completeResetIfDue()
+  if (alarm.name === SCHEDULE_ALARM) refresh()
 })
 
 // Redirect rules only see full page loads. Sites like YouTube change page

@@ -41,7 +41,7 @@ export function SiteEditor({
       <td className="cell-icon">
         <Favicon url={initialUrl} />
       </td>
-      <td colSpan={2}>
+      <td colSpan={2} className="cell-form">
         {/* The form wraps the inputs inside one cell so Enter submits and Escape cancels. */}
         <form
           id="site-editor"
