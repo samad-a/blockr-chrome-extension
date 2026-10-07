@@ -80,9 +80,11 @@ export function SiteEditor({
             }}
           />
         </form>
-        <p className="editor-error" role="alert">
-          {error}
-        </p>
+        {error && (
+          <p className="editor-error" role="alert">
+            {error}
+          </p>
+        )}
       </td>
       <td colSpan={2} className="cell-limit-edit">
         <label className="limit-field">

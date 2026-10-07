@@ -177,6 +177,7 @@ body {
 
 .site-table td {
   padding: 6px 8px;
+  vertical-align: middle;
   background-color: var(--row);
 }
 
@@ -215,8 +216,7 @@ body {
 }
 
 .editor-error {
-  margin: 4px 0 0;
-  min-height: 1.2em;
+  margin: 6px 0 0;
   font-size: 13px;
   font-weight: 700;
 }
