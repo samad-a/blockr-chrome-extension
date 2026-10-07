@@ -43,8 +43,9 @@ describe('export and import round trip', () => {
     ])
   })
 
-  it('names the file by date', () => {
-    expect(exportFileName(new Date('2026-10-13T23:59:00Z'))).toBe('blockr-list-2026-10-13.json')
+  it('names the file by the local date, including just after midnight', () => {
+    expect(exportFileName(new Date(2026, 9, 13, 23, 59))).toBe('blockr-list-2026-10-13.json')
+    expect(exportFileName(new Date(2026, 9, 14, 0, 26))).toBe('blockr-list-2026-10-14.json')
   })
 })
 

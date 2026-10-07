@@ -1,7 +1,7 @@
 // Export and import of the custom block list as a small JSON file.
 import type { CustomSite } from './types'
 import { validateSite } from './url'
-import { parseLimit } from './usage'
+import { dayKey, parseLimit } from './usage'
 
 /** Most custom sites allowed. Chrome's sync storage holds ~500 entries and 100 KB; this leaves headroom. */
 export const MAX_CUSTOM_SITES = 400
@@ -43,7 +43,8 @@ export function exportList(sites: CustomSite[], now: Date = new Date()): string 
   )
 }
 
-export const exportFileName = (now: Date = new Date()) => `blockr-list-${now.toISOString().slice(0, 10)}.json`
+/** Named by the user's local date, not UTC, so it matches their calendar. */
+export const exportFileName = (now: Date = new Date()) => `blockr-list-${dayKey(now)}.json`
 
 export type ParsedImport = { sites: ImportedSite[]; invalid: number } | { error: string }
 
