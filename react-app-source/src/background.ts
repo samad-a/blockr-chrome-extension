@@ -5,6 +5,7 @@ import type { ActiveSite } from './shared/blocking'
 import { isPaused, loadLocal, setPause } from './shared/local'
 import { RESET_ALARM, completeResetIfDue, rearmResetAlarm } from './shared/lockActions'
 import { isBlockingNow, loadSchedule, nextChange } from './shared/schedule'
+import { ensureMigrated } from './shared/migrations'
 import { loadState } from './shared/storage'
 import { IDLE_SECONDS, bankElapsed, trackedSiteUrls } from './shared/tracking'
 import type { TrackerState } from './shared/tracking'
@@ -145,9 +146,15 @@ function requestSample() {
     .catch((e) => console.error('Blockr: usage tracking failed', e))
 }
 
-chrome.runtime.onInstalled.addListener(refresh)
+// Upgrade stored data first (it is safe to repeat), then apply the rules.
+const startUp = () => {
+  ensureMigrated()
+    .catch((e) => console.error('Blockr: migration failed', e))
+    .finally(refresh)
+}
+chrome.runtime.onInstalled.addListener(startUp)
 chrome.runtime.onStartup.addListener(() => {
-  refresh()
+  startUp()
   rearmResetAlarm()
 })
 

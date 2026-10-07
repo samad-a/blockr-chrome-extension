@@ -39,7 +39,7 @@ const CATEGORY_LABEL: Record<Category, string> = {
 }
 
 export default function OptionsApp() {
-  const { state, update, error } = useBlockList()
+  const { state, update, error, readOnly } = useBlockList()
   const { blockCounts, usage, pause } = useLocalState()
   const lock = useLock()
   const { theme, setTheme } = useTheme()
@@ -90,7 +90,12 @@ export default function OptionsApp() {
       <Tabs tabs={TABS} active={tab} onChange={setTab} />
 
       <section className="card" id="tab-panel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-        {error && (
+        {readOnly && (
+          <p className="banner" role="alert">
+            This list was saved by a newer version of Blockr. Update Blockr to change it. Nothing has been altered.
+          </p>
+        )}
+        {error && !readOnly && (
           <p className="banner" role="alert">
             Couldn&rsquo;t save: {error}
           </p>
