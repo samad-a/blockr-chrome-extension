@@ -1,7 +1,7 @@
 /* Popup styles. Colours come from shared/theme.css. */
 
 h1 {
-    color: var(--text);
+    color: var(--accent);
     font-size: 28px;
     font-weight: 700;
     font-style: italic;
@@ -41,7 +41,7 @@ button {
 
 button:hover {
     background-color: var(--surface);
-    color: var(--text);
+    color: var(--accent);
 }
 
 button:active {
@@ -57,7 +57,7 @@ button:focus-visible {
 .secondary {
     width: 100%;
     background-color: var(--surface);
-    color: var(--text);
+    color: var(--accent);
 }
 
 .secondary:hover {

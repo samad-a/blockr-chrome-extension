@@ -47,7 +47,7 @@
 
 .unlock-submit:hover:not(:disabled) {
   background-color: var(--surface);
-  color: var(--text);
+  color: var(--accent);
 }
 
 .unlock-submit:disabled {
@@ -60,7 +60,7 @@
   min-height: 1.2em;
   font-size: 13px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--accent);
 }
 
 /* Text-style button, e.g. "forgot password?" */
@@ -68,7 +68,7 @@
   padding: 0;
   border: none;
   background: none;
-  color: var(--text);
+  color: var(--accent);
   font-family: inherit;
   font-size: 13px;
   font-weight: 700;
@@ -79,7 +79,7 @@
 
 .link-button:hover {
   background: none;
-  color: var(--text);
+  color: var(--accent);
   text-decoration: none;
 }
 
