@@ -41,25 +41,27 @@ export function PasswordSettings({ hasPassword }: { hasPassword: boolean }) {
       </p>
 
       <form className="password-form" onSubmit={submit}>
-        <input
-          className="text-input"
-          type="password"
-          placeholder={hasPassword ? 'New password' : 'Password'}
-          aria-label={hasPassword ? 'New password' : 'Password'}
-          autoComplete="new-password"
-          value={password}
-          onChange={(e) => setPasswordText(e.target.value)}
-        />
-        <input
-          className="text-input"
-          type="password"
-          placeholder="Confirm password"
-          aria-label="Confirm password"
-          autoComplete="new-password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-        />
-        <button type="submit" className="pill" disabled={busy}>
+        <label className="field">
+          {hasPassword ? 'New password' : 'Password'}
+          <input
+            className="text-input field-input"
+            type="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(e) => setPasswordText(e.target.value)}
+          />
+        </label>
+        <label className="field">
+          Confirm password
+          <input
+            className="text-input field-input"
+            type="password"
+            autoComplete="new-password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+          />
+        </label>
+        <button type="submit" className="pill pill-large" disabled={busy}>
           {hasPassword ? 'change password' : 'set password'}
         </button>
       </form>
@@ -87,7 +89,7 @@ export function PasswordSettings({ hasPassword }: { hasPassword: boolean }) {
         </div>
       )}
 
-      <p className="settings-note">
+      <p className="info-box">
         This is a speed bump, not a vault: it stops quick, impulsive changes. Someone determined could still turn
         Blockr off or remove it on the Chrome extensions page. The password is stored only as a salted hash on this
         device, so it isn&rsquo;t synced, and reinstalling the extension clears it.
