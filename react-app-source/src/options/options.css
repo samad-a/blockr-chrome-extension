@@ -203,18 +203,6 @@ body {
   font-size: 14px;
 }
 
-.master {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.master p {
-  margin: 0;
-}
-
 .site-table {
   width: 100%;
   min-width: 700px;
@@ -426,34 +414,134 @@ body {
 .presets {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 12px;
 }
 
-.preset-section h3 {
-  margin: 0 0 8px;
-  font-size: 18px;
+.presets-hint {
+  margin: 0 0 4px;
+  color: var(--muted);
 }
 
-/* Line the columns up across the three preset tables. */
-@media (min-width: 1061px) {
-  .preset-section .site-table {
-    table-layout: fixed;
+.preset-block {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background-color: var(--surface);
+}
+
+.preset-block.open {
+  border-color: var(--soft);
+}
+
+.preset-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 16px 6px 6px;
+}
+
+.preset-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: inherit;
+}
+
+.preset-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.preset-toggle:hover {
+  background-color: var(--row);
+}
+
+.preset-toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.preset-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.preset-title > .preset-name {
+  padding: 10px;
+}
+
+.preset-name small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.preset-icons {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.preset-icons.dimmed {
+  opacity: 0.4;
+}
+
+.preset-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chevron {
+  transition: transform 0.15s;
+}
+
+.preset-block.open .chevron {
+  transform: rotate(180deg);
+}
+
+.preset-body {
+  padding: 0 16px 14px;
+}
+
+/* Narrow windows: the icons drop onto their own line under the name. */
+@media (max-width: 640px) {
+  .preset-name {
+    flex: 1;
   }
 
-  .preset-section .site-table th:first-child {
-    width: 40px;
+  .preset-icons {
+    order: 3;
+    flex-basis: 100%;
   }
 
-  .preset-section .site-table .col-times {
-    width: 150px;
+  .preset-edit {
+    margin-left: 0;
   }
 
-  .preset-section .site-table .col-block {
-    width: 110px;
-  }
-
-  .preset-section .site-table .col-end {
-    width: 24px;
+  .preset-head {
+    gap: 8px;
+    padding-right: 12px;
   }
 }
 
