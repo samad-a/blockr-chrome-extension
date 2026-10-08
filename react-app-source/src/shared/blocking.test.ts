@@ -43,7 +43,7 @@ describe('activeSites', () => {
         'social-snapchat': false,
         'social-threads': false,
       },
-      categories: { social: true, shortForm: false },
+      categories: { social: true, shortForm: false, adult: false },
     }
     expect(activeSites(state).map((s) => s.url)).toEqual(['tiktok.com', 'reddit.com', 'redd.it'])
   })
@@ -122,7 +122,7 @@ describe('daily limits', () => {
     const withPreset: BlockListState = {
       customSites: [limited('tiktok.com', 15)],
       presetEnabled: {},
-      categories: { social: true, shortForm: false },
+      categories: { social: true, shortForm: false, adult: false },
     }
     const urls = activeSites(withPreset, EMPTY_USAGE, TODAY).map((s) => s.url)
     expect(urls).not.toContain('tiktok.com')
@@ -133,7 +133,7 @@ describe('daily limits', () => {
 })
 
 describe('presets with several addresses', () => {
-  const social: BlockListState = { ...DEFAULT_STATE, categories: { social: true, shortForm: false } }
+  const social: BlockListState = { ...DEFAULT_STATE, categories: { social: true, shortForm: false, adult: false } }
 
   it('blocks every address of a preset but counts it as one site', () => {
     const only = (id: string): BlockListState => ({
@@ -157,7 +157,7 @@ describe('presets with several addresses', () => {
   })
 
   it('covers both address forms of a reel, but not the rest of the site', () => {
-    const shortForm: BlockListState = { ...DEFAULT_STATE, categories: { social: false, shortForm: true } }
+    const shortForm: BlockListState = { ...DEFAULT_STATE, categories: { social: false, shortForm: true, adult: false } }
     const sites = activeSites(shortForm)
     expect(findMatch(sites, 'https://www.instagram.com/reels/')?.name).toBe('Instagram Reels')
     expect(findMatch(sites, 'https://www.instagram.com/reel/Cabc123/')?.name).toBe('Instagram Reels')
@@ -165,5 +165,24 @@ describe('presets with several addresses', () => {
     expect(findMatch(sites, 'https://www.snapchat.com/spotlight/x')?.name).toBe('Snapchat Spotlight')
     expect(findMatch(sites, 'https://www.instagram.com/someone/')).toBeUndefined()
     expect(findMatch(sites, 'https://www.facebook.com/someone')).toBeUndefined()
+  })
+})
+
+describe('adult content presets', () => {
+  it('are off until the category is switched on, and then block their sites', () => {
+    expect(activeSites(DEFAULT_STATE).map((s) => s.url)).not.toContain('pornhub.com')
+    const on: BlockListState = { ...DEFAULT_STATE, categories: { social: false, shortForm: false, adult: true } }
+    expect(findMatch(activeSites(on), 'https://www.pornhub.com/video')?.name).toBe('Pornhub')
+    expect(findMatch(activeSites(on), 'https://www.instagram.com/')).toBeUndefined()
+  })
+
+  it('can be switched off one site at a time', () => {
+    const on: BlockListState = {
+      ...DEFAULT_STATE,
+      categories: { social: false, shortForm: false, adult: true },
+      presetEnabled: { 'adult-pornhub': false },
+    }
+    expect(findMatch(activeSites(on), 'https://pornhub.com/')).toBeUndefined()
+    expect(findMatch(activeSites(on), 'https://xvideos.com/')?.name).toBe('XVideos')
   })
 })

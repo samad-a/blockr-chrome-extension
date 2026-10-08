@@ -45,7 +45,7 @@ describe('planMigration', () => {
   })
 
   it('handles version-1 data that has no custom sites at all', () => {
-    const plan = planMigration({ categories: { social: true, shortForm: false } })
+    const plan = planMigration({ categories: { social: true, shortForm: false, adult: false } })
     expect(plan?.set).toMatchObject({ [ORDER_KEY]: [], [VERSION_KEY]: CURRENT_VERSION })
   })
 
@@ -98,7 +98,7 @@ describe('upgrading real stored data', () => {
   const v1 = {
     customSites: [oldSite('a', { dailyLimit: 20 }), oldSite('b', { enabled: false })],
     presetEnabled: { 'social-x': false },
-    categories: { social: true, shortForm: false },
+    categories: { social: true, shortForm: false, adult: false },
     theme: 'dark',
   }
 

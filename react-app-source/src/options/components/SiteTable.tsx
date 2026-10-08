@@ -36,10 +36,10 @@ export function SiteTable({
           <th className="cell-icon" />
           <th>name</th>
           <th>URL</th>
-          <th className="cell-center">times blocked</th>
+          <th className="cell-center col-times">times blocked</th>
           {showLimit && <th>daily limit</th>}
-          <th className="cell-center">block</th>
-          <th />
+          <th className="cell-center col-block">block</th>
+          <th className="col-end" />
         </tr>
       </thead>
       <tbody>

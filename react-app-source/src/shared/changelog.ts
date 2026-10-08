@@ -8,14 +8,16 @@ export type ReleaseNote = {
 
 export const RELEASE_NOTES: ReleaseNote[] = [
   {
-    version: '1.1',
+    version: '1.2',
     highlights: [
+      'A new layout: pages for your block list, presets, schedule, password and settings, listed down the left',
       'Dark mode, or follow your device setting',
       'Optional password protection for pausing and changing your list',
       'Block schedule: only block on the days and hours you choose',
       'Daily time limits for sites on your custom list',
       'More sites in the social media and short-form presets, each covering all of its addresses',
       'Export and import your custom list from Settings',
+      'A new Adult content preset on the Presets page, switched off until you turn it on',
     ],
   },
 ]

@@ -1,4 +1,4 @@
-export type Category = 'social' | 'shortForm'
+export type Category = 'social' | 'shortForm' | 'adult'
 
 /** A site the user added by hand on the "Custom Block List" tab. */
 export type CustomSite = {

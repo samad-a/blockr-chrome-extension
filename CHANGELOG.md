@@ -7,9 +7,16 @@ When you release a new version: add its section here, add a matching short entry
 `react-app-source/src/shared/changelog.ts` (shown once inside the extension after an update), and bump
 `version` in `manifest.config.ts`.
 
-## [1.1] - unreleased
+## [1.2] - unreleased
+
+Version 1.1 was never published; everything in it ships in 1.2, together with the changes below.
 
 ### Added
+- A new options layout: a card on the left lists Block list, Presets, Schedule, Password and Settings, and each opens
+  its own page. On narrow windows the list opens from a "menu" button. Each page has its own address (`#presets`,
+  `#schedule` and so on), so refreshing keeps your place.
+- An Adult content preset on the Presets page, switched off until you turn it on. It is controlled only from the
+  options page.
 - Dark mode, with a Light / Dark / System choice in Settings. Colours are tuned for WCAG AA contrast.
 - Optional password protection for the options page and for pausing or turning off blocking. A forgotten
   password can be reset after a cancellable 6-hour wait.
@@ -30,6 +37,7 @@ When you release a new version: add its section here, add a matching short entry
 - Stored data now has a version number, so future updates can upgrade it safely. Data written by a newer Blockr is
   never modified by an older one.
 - The options page fills the window on large screens and switches to a card layout on narrow ones.
+- The three preset categories now share one Presets page instead of separate tabs.
 - Popup redesigned as a bordered card, with a status line and a pause drop-down.
 - "Date added" moved out of the table into the edit row (and the card layout on narrow screens).
 

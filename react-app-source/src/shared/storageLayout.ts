@@ -18,7 +18,7 @@ export type SyncData = Record<string, unknown>
 export const DEFAULT_STATE: BlockListState = {
   customSites: [],
   presetEnabled: {},
-  categories: { social: false, shortForm: false },
+  categories: { social: false, shortForm: false, adult: false },
 }
 
 export const SITE_PREFIX = 'site:'
@@ -74,7 +74,12 @@ export function stateFromData(data: SyncData): BlockListState {
   return {
     customSites,
     presetEnabled: isRecord(data.presetEnabled) ? (data.presetEnabled as Record<string, boolean>) : {},
-    categories: { social: categories.social === true, shortForm: categories.shortForm === true },
+    // A missing switch (data from before it existed) reads as off.
+    categories: {
+      social: categories.social === true,
+      shortForm: categories.shortForm === true,
+      adult: categories.adult === true,
+    },
   }
 }
 

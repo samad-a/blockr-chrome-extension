@@ -70,10 +70,15 @@ describe('stateFromData', () => {
   })
 
   it('reads preset and category settings', () => {
-    const data = { presetEnabled: { 'social-x': false }, categories: { social: true, shortForm: 'yes' } }
+    const data = { presetEnabled: { 'social-x': false }, categories: { social: true, shortForm: 'yes', adult: false } }
     const state = stateFromData(data)
     expect(state.presetEnabled).toEqual({ 'social-x': false })
-    expect(state.categories).toEqual({ social: true, shortForm: false })
+    expect(state.categories).toEqual({ social: true, shortForm: false, adult: false })
+  })
+
+  it('reads a category switch that did not exist yet as off', () => {
+    const state = stateFromData({ categories: { social: true, shortForm: true } })
+    expect(state.categories).toEqual({ social: true, shortForm: true, adult: false })
   })
 })
 
@@ -102,7 +107,7 @@ describe('diffState', () => {
   })
 
   it('writes presets and categories only when they change', () => {
-    const next = { ...base, presetEnabled: { 'social-x': false }, categories: { social: true, shortForm: false } }
+    const next = { ...base, presetEnabled: { 'social-x': false }, categories: { social: true, shortForm: false, adult: false } }
     expect(diffState(base, next).set).toEqual({ presetEnabled: next.presetEnabled, categories: next.categories })
   })
 
@@ -110,7 +115,7 @@ describe('diffState', () => {
     const next: BlockListState = {
       customSites: [site('b'), site('c', { dailyLimit: 15 })],
       presetEnabled: { 'social-x': false },
-      categories: { social: true, shortForm: true },
+      categories: { social: true, shortForm: true, adult: false },
     }
     const { set, remove } = diffState(base, next)
     const stored: Record<string, unknown> = {

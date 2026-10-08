@@ -70,4 +70,4 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 | Small promo tile (440x280) | `promo-tile-440x280.png` |
 | Marquee promo tile (1400x560, optional) | `marquee-promo-tile-1400x560.png` |
 
-The extension package itself is `react-app-source/release/blockr-1.1.zip` (`npm run package`).
+The extension package itself is `react-app-source/release/blockr-1.2.zip` (`npm run package`).

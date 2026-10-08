@@ -22,12 +22,12 @@ describe('countBlocked', () => {
     const presetEnabled = { 'social-tiktok': false, 'social-x': false, 'social-facebook': false }
     expect(countBlocked({ ...DEFAULT_STATE, presetEnabled })).toBe(0)
     expect(
-      countBlocked({ ...DEFAULT_STATE, presetEnabled, categories: { social: true, shortForm: false } }),
+      countBlocked({ ...DEFAULT_STATE, presetEnabled, categories: { social: true, shortForm: false, adult: false } }),
     ).toBe(4)
   })
 
   it('treats presets as on unless switched off', () => {
-    const categories = { social: true, shortForm: false }
+    const categories = { social: true, shortForm: false, adult: false }
     expect(countBlocked({ ...DEFAULT_STATE, categories })).toBe(7)
     expect(countBlocked({ ...DEFAULT_STATE, categories, presetEnabled: { 'social-reddit': false } })).toBe(6)
   })
@@ -47,7 +47,7 @@ describe('countBlocked', () => {
         'short-facebook-reels': false,
         'short-snapchat-spotlight': false,
       },
-      categories: { social: true, shortForm: true },
+      categories: { social: true, shortForm: true, adult: false },
     }
     expect(countBlocked(state)).toBe(1)
   })
