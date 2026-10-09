@@ -66,8 +66,8 @@ Blockr blocks websites the user chooses, redirecting them to a "blocked" page, t
 | Dashboard field | File |
 |---|---|
 | Store icon (128x128) | `store-icon-128x128.png` |
-| Screenshots (1280x800, up to 5) | `screenshot-1-options.png`, `screenshot-2-popup.png`, `screenshot-3-blocked.png` |
+| Screenshots (1280x800, up to 5) | `screenshot-1-options.png`, `screenshot-2-popup.png`, `screenshot-3-blocked.png`, `screenshot-4-presets.png`, `screenshot-5-dark-mode.png` |
 | Small promo tile (440x280) | `promo-tile-440x280.png` |
 | Marquee promo tile (1400x560, optional) | `marquee-promo-tile-1400x560.png` |
 
-The extension package itself is `react-app-source/release/blockr-1.2.zip` (`npm run package`).
+The extension package itself is `react-app-source/release/blockr-1.3.zip` (`npm run package`).

@@ -7,8 +7,7 @@
 **Block distracting websites and stay focused.**
 A simple, private Chrome extension. No account, no tracking, no ads.
 
-<!-- Replace with the real link once the extension is published. -->
-Chrome Web Store: _coming soon_ · [Privacy policy](PRIVACY.md) · [Support the project](https://ko-fi.com/samaddev)
+[Chrome Web Store](https://chromewebstore.google.com/detail/blockr-website-blocker/lndfkhpkbcnjhkedfoaedkboipijebji) · [Privacy policy](PRIVACY.md) · [Support the project](https://ko-fi.com/samaddev)
 
 </div>
 
