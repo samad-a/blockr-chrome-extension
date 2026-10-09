@@ -70,10 +70,11 @@ body {
 .brand h1,
 .brand-name {
   margin: 0;
-  color: var(--accent);
+  color: var(--brand);
+  font-family: 'Righteous', 'DM Sans', sans-serif;
   font-size: 28px;
-  font-weight: 700;
-  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .section-nav {
@@ -263,7 +264,7 @@ body {
 
 .editor-error {
   margin: 6px 0 0;
-  color: var(--accent);
+  color: var(--danger);
   font-size: 13px;
   font-weight: 700;
 }
@@ -315,13 +316,13 @@ body {
 }
 
 .limit-bar i.reached {
-  background-color: var(--pill);
+  background-color: var(--danger-fill);
 }
 
 .limit-tag {
   padding: 1px 8px;
   border-radius: 999px;
-  background-color: var(--pill);
+  background-color: var(--danger-fill);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -367,7 +368,7 @@ body {
 }
 
 .text-input[aria-invalid='true'] {
-  border-color: var(--brand);
+  border-color: var(--danger);
   border-width: 2px;
 }
 
@@ -594,6 +595,10 @@ body {
   font-weight: 700;
 }
 
+.settings-message[role='alert'] {
+  color: var(--danger);
+}
+
 .segmented {
   display: inline-flex;
   margin: 0;
@@ -696,11 +701,11 @@ body {
   text-align: center;
 }
 
-.lock-screen .brand img {
-  height: 48px;
+.lock-logo {
+  height: 96px;
 }
 
-.lock-screen h2 {
+.lock-screen h1 {
   margin: 8px 0 0;
   font-size: 28px;
 }

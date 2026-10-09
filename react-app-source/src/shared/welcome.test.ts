@@ -21,7 +21,7 @@ describe('shouldShowWelcome', () => {
 
 describe('notesFor', () => {
   it('finds the notes for a version, and nothing for versions without any', () => {
-    expect(notesFor('1.2')?.highlights.length).toBeGreaterThan(0)
+    expect(notesFor('1.3')?.highlights.length).toBeGreaterThan(0)
     expect(notesFor('0.0.1')).toBeUndefined()
   })
 })

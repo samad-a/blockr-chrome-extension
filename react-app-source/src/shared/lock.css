@@ -22,7 +22,7 @@
 }
 
 .unlock-input[aria-invalid='true'] {
-  border-color: var(--brand);
+  border-color: var(--danger);
 }
 
 .unlock-input:focus-visible,
@@ -60,7 +60,7 @@
   min-height: 1.2em;
   font-size: 13px;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--danger);
 }
 
 /* Text-style button, e.g. "forgot password?" */

@@ -7,8 +7,8 @@ export default defineManifest({
   manifest_version: 3,
   name: 'Blockr - Website Blocker',
   description:
-    'Extension that allows the user to block websites, to stay productive and focused.',
-  version: '1.2',
+    'Block distracting websites like social media and short-form video, and stay focused. Simple, private, no account needed.',
+  version: '1.3',
   // The favicon and declarativeNetRequest redirect features need a reasonably recent Chrome.
   minimum_chrome_version: '116',
   icons: {

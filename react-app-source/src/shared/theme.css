@@ -3,14 +3,16 @@
  * (unless the user forced light) or when the user forced dark (data-theme="dark").
  * The dark values are therefore listed twice; keep the two blocks in sync.
  *
- * --text is ordinary body text; --accent is the red used for titles, the logo and
+ * --text is ordinary body text; --accent is the red used for the wordmark, titles and
  * text on outlined buttons; --muted is quieter supporting text.
- * --brand is the logo red, used for fills, borders and large text.
- * --pill is the deeper red behind white button text, and --accent is deep enough
- * to read as small text. Both reach the 4.5:1 WCAG AA contrast ratio.
+ * --brand is the logo red (#E5484D), used for fills, toggles, borders and the wordmark (large
+ * text, so 3:1 is enough). --pill is the deeper red behind white button text.
+ * --danger is for error text; --danger-fill is a solid red behind white text. They share
+ * the brand's reds, so errors are told apart by their wording and placement, not hue.
  * --tint is the pale red behind the active menu item; --panel is a hover/inset tint;
  * --row is the faint fill for hovered and edited table rows; --line is a hairline.
  * --soft is the border of form fields; --toggle-off is a switch that is off.
+ * Every text pair reaches the 4.5:1 WCAG AA ratio, and borders and switches 3:1.
  */
 :root {
   color-scheme: light;
@@ -20,9 +22,11 @@
   --tint: #fbe3e2;
   --row: #faf5f4;
   --line: #f0e4e2;
-  --brand: #d54949;
+  --brand: #e5484d;
   --pill: #b83232;
   --accent: #b02a2a;
+  --danger: #b02a2a;
+  --danger-fill: #b83232;
   --text: #2b2325;
   --muted: #6f6365;
   --soft: #948789;
@@ -40,9 +44,11 @@
   --tint: #3a2124;
   --row: #251d1e;
   --line: #2e2425;
-  --brand: #d54949;
+  --brand: #e5484d;
   --pill: #c94242;
   --accent: #f4a0a0;
+  --danger: #f4a0a0;
+  --danger-fill: #c94242;
   --text: #f1e8e8;
   --muted: #b3a5a7;
   --soft: #7d6f71;
@@ -61,9 +67,13 @@
     --tint: #3a2124;
     --row: #251d1e;
     --line: #2e2425;
-    --brand: #d54949;
+    --brand: #e5484d;
     --pill: #c94242;
     --accent: #f4a0a0;
+    --danger: #f4a0a0;
+    --danger-fill: #c94242;
+  --danger: #f4a0a0;
+  --danger-fill: #c94242;
     --text: #f1e8e8;
     --muted: #b3a5a7;
     --soft: #7d6f71;
@@ -71,5 +81,15 @@
     --tab-off: #3a2e30;
     --placeholder-icon: #5b4f51;
     --shadow: rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Respect the operating system's "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }

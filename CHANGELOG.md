@@ -7,11 +7,16 @@ When you release a new version: add its section here, add a matching short entry
 `react-app-source/src/shared/changelog.ts` (shown once inside the extension after an update), and bump
 `version` in `manifest.config.ts`.
 
-## [1.2] - unreleased
+## [1.3] - unreleased
 
-Version 1.1 was never published; everything in it ships in 1.2, together with the changes below.
+Versions 1.1 and 1.2 were never published; everything in them ships in 1.3, together with the changes below.
 
 ### Added
+- A new icon: a clean red shield with a white "B". The wordmark and the buttons now use exactly the icon's red.
+  Colours were re-checked for contrast: text reaches at least 4.5:1 and borders and switches 3:1, in light and dark mode.
+- The "Blockr" wordmark is set in Righteous (bundled with the extension, SIL Open Font License) instead of italic.
+- Separate tokens for error colours, so they can be changed independently of the brand colour.
+- Animations stop when the system's "reduce motion" setting is on.
 - A new options layout: a card on the left lists Block list, Presets, Schedule, Password and Settings, and each opens
   its own page. On narrow windows the list opens from a "menu" button. Each page has its own address (`#presets`,
   `#schedule` and so on), so refreshing keeps your place.

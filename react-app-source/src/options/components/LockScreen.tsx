@@ -12,11 +12,8 @@ type LockScreenProps = {
 export function LockScreen({ resetAt, lockedUntil, now }: LockScreenProps) {
   return (
     <main className="lock-screen">
-      <div className="brand">
-        <img src={blockrIcon} alt="" />
-        <h1>Blockr</h1>
-      </div>
-      <h2>Blockr is locked</h2>
+      <img className="lock-logo" src={blockrIcon} alt="" />
+      <h1>Blockr is locked</h1>
       <p>Enter your password to change your block list.</p>
 
       <UnlockForm lockedUntil={lockedUntil} onUnlocked={() => {}} />

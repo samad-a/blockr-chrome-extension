@@ -8,8 +8,9 @@ export type ReleaseNote = {
 
 export const RELEASE_NOTES: ReleaseNote[] = [
   {
-    version: '1.2',
+    version: '1.3',
     highlights: [
+      'A new icon and wordmark, in light and dark mode',
       'A new layout: pages for your block list, presets, schedule, password and settings, listed down the left',
       'Dark mode, or follow your device setting',
       'Optional password protection for pausing and changing your list',
