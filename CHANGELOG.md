@@ -7,7 +7,7 @@ When you release a new version: add its section here, add a matching short entry
 `react-app-source/src/shared/changelog.ts` (shown once inside the extension after an update), and bump
 `version` in `manifest.config.ts`.
 
-## [1.3] - unreleased
+## [1.3] - 2026-10-10
 
 Versions 1.1 and 1.2 were never published; everything in them ships in 1.3, together with the changes below.
 
